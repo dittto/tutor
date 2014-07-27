@@ -1,39 +1,48 @@
-var boxes = {
-    testBox: {
-        maxWidth: 250,
-        parentObject: '#testPage',
-        buttonList: {extraButton: 'Do something'},
-        buttonText: 'Ok',
-        content: '#textPageContent',
-        contentText: '',
-        trigger: '',
-        isCentral: true,
-        needsBg: true
-    }
-};
-
-/**
- * A list of tutorials made of pages
- *
- * @type {*[]}
- */
-var tutorials = {
-    homepage: {
-        boxes: ['testBox', ['multiple', 'atOnce']]
-    }
-};
-
 
 var Tutor = function($, window) {
 
     // init vars
-    var boxData = [], tutorialData = [], defaultOptions = {};
+    var boxData = [], tutorialData = [], defaultOptions = {}, defaultBoxOptions = {}, defaultPageOptions = {}, config = {};
 
     // init the default options
     defaultOptions = {
         boxClass: 'tutor-box',
         boxBgSelector: '.tutor-box-bg',
         cancelId: 'tutor-cancel-button'
+    };
+
+    // init the default box options
+    /**
+     * Inits the default box options
+     * maxWidth:
+     * parentObject: '#id' or '.class'
+     * buttonList: {extraButton: 'Extra button', anotherButton: 'Another button'}
+     * buttonText:
+     * content: '#textPageContent'
+     * contentText: 'Some text to use'
+     * trigger: 'name-of-trigger-event'
+     * triggerEvent: 'body' or '#eventStoreObject'
+     * autoClose:
+     * isCentral:
+     * needsBg:
+     */
+    defaultBoxOptions = {
+        maxWidth: 250,
+        parentObject: '.tutor-box-parent',
+        buttonList: {},
+        buttonText: 'Ok',
+        content: '',
+        contentText: '',
+        trigger: '',
+        triggerEvent: 'body',
+        autoClose: false,
+        isCentral: true,
+        needsBg: true
+    };
+
+    // init the default page options
+    defaultPageOptions = {
+        boxes: []
     };
 
     /**
@@ -44,8 +53,23 @@ var Tutor = function($, window) {
      */
     function init(boxes, tutorials, config) {
         // init vars
+        var boxKey, pageKey;
         boxData = boxes;
         tutorialData = tutorials;
+
+        // update the box data to contain default options
+        for (boxKey in boxData) {
+            if (boxData.hasOwnProperty(boxKey)) {
+                boxData[boxKey] = $.extend({}, defaultBoxOptions, boxData[boxKey]);
+            }
+        }
+
+        // update the page data to contain default options
+        for (pageKey in tutorialData) {
+            if (tutorialData.hasOwnProperty(pageKey)) {
+                tutorialData[pageKey] = $.extend({}, defaultPageOptions, tutorialData[pageKey]);
+            }
+        }
 
         // remove current page
         hidePage(config);
@@ -55,12 +79,12 @@ var Tutor = function($, window) {
      *
      * @param name
      */
-    function tutorial(name) {
+    function tutorial(config, name) {
         // remove any current page options
         hidePage(config);
 
         // show the first box
-        showPage(name, 0);
+        showPage(config, name, 0);
 
         // show the cancel button
         showCancelButton();
@@ -104,22 +128,19 @@ var Tutor = function($, window) {
             return false;
         }
 
-        // make sure the list of pages is an array
-        if (typeof tutorialData[name] === 'string') {
-            tutorialData[name] = [tutorialData[name]];
+        // get the boxes to show and make sure the list of boxes is an array
+        var boxes = tutorialData[name].boxes[id];
+        if (typeof boxes === 'string') {
+            boxes = [boxes];
         }
 
-        // get the boxes to show
-        var boxes = [];
-        for (var page in tutorialData[name]) {
-            // store the boxes
-            boxes[page] = boxData[page];
-
+        // loop through all available boxes
+        for (var page in boxes) {
             // show each box
-            showBox(config, boxes[page]);
+            showBox(config, boxData[boxes[page]]);
 
             // work out if to show the background
-            if (boxes[page].needsBg) {
+            if (boxData[boxes[page]].needsBg) {
                 showBackground(config);
             }
         }
@@ -184,36 +205,18 @@ var Tutor = function($, window) {
      * config
      *
      * @param userConfig The config supplied by the user
-     * @return {{}}
+     * @return {}
      */
-    function getOptions(userConfig) {
-        // init vars
-        var config = defaultOptions, key;
-
-        // build the config
-        for (key in userConfig) {
-            if (userConfig.hasOwnProperty(key)) {
-                config[key] = userConfig;
-            }
-        }
-
-        return config;
+    function getConfig(userConfig) {
+        return $.extend({}, defaultOptions, userConfig);
     }
 
     /**
      * Public methods
      */
     return {
-        init: function(boxes, tutorials, userConfig) {
-            init(boxes, tutorials, getOptions(userConfig || {}));
-        },
-        tutorial: tutorial
+        init: init,
+        tutorial: tutorial,
+        getConfig: getConfig
     };
 };
-
-
-/**
- * var tutor = new Tutor();
- * tutor.init();
- * tutor.tutorial('homepage');
- */
