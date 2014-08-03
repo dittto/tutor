@@ -11,3 +11,8 @@ An idea to help make web applications easier to learn to use. This will show you
  - there can be multiple tutorials
  - the progress can be paused, cancelled, or reset at any time
  - the popups should work on responsive designs
+
+## Next steps
+
+ - cancel
+ - plugin into cookie to save progress

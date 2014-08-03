@@ -1,17 +1,23 @@
-
-var Tutor = function($, window) {
-
+/**
+ *
+ * @param tutorConfig
+ * @param tutorDesign
+ * @param tutorPage
+ * @param tutorPromise
+ * @returns {{init: Function, tutorial: Function, getConfig: Function}}
+ * @constructor
+ */
+var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
     // init vars
-    var boxData = [], tutorialData = [], defaultOptions = {}, defaultBoxOptions = {}, defaultPageOptions = {}, config = {};
+    var boxData = [], tutorialData = [], defaultOptions = {}, defaultBoxOptions = {}, defaultPageOptions = {};
 
     // init the default options
     defaultOptions = {
         boxClass: 'tutor-box',
-        boxBgSelector: '.tutor-box-bg',
+        boxBgClass: 'tutor-box-bg',
         cancelId: 'tutor-cancel-button'
     };
 
-    // init the default box options
     /**
      * Inits the default box options
      * maxWidth:
@@ -21,7 +27,8 @@ var Tutor = function($, window) {
      * content: '#textPageContent'
      * contentText: 'Some text to use'
      * trigger: 'name-of-trigger-event'
-     * triggerEvent: 'body' or '#eventStoreObject'
+     * triggerOn: 'body' or '#eventStoreObject'
+     * align: 'top' or 'bottom' to begin with
      * autoClose:
      * isCentral:
      * needsBg:
@@ -34,10 +41,11 @@ var Tutor = function($, window) {
         content: '',
         contentText: '',
         trigger: '',
-        triggerEvent: 'body',
+        triggerOn: 'body',
+        align: 'top',
         autoClose: false,
-        isCentral: true,
-        needsBg: true
+        isCentral: false,
+        needsBg: false
     };
 
     // init the default page options
@@ -60,14 +68,14 @@ var Tutor = function($, window) {
         // update the box data to contain default options
         for (boxKey in boxData) {
             if (boxData.hasOwnProperty(boxKey)) {
-                boxData[boxKey] = $.extend({}, defaultBoxOptions, boxData[boxKey]);
+                boxData[boxKey] = tutorConfig.merge(defaultBoxOptions, boxData[boxKey]);
             }
         }
 
         // update the page data to contain default options
         for (pageKey in tutorialData) {
             if (tutorialData.hasOwnProperty(pageKey)) {
-                tutorialData[pageKey] = $.extend({}, defaultPageOptions, tutorialData[pageKey]);
+                tutorialData[pageKey] = tutorConfig.merge(defaultPageOptions, tutorialData[pageKey]);
             }
         }
 
@@ -77,67 +85,66 @@ var Tutor = function($, window) {
 
     /**
      *
-     * @param name
+     * @param config
+     * @param tutorialName
      */
-    function tutorial(config, name) {
+    function tutorial(config, tutorialName) {
         // remove any current page options
         hidePage(config);
 
         // show the first box
-        showPage(config, name, 0);
+        tutorPromise.reset();
+        tutorPage.setPage(0);
+        showPage(config, tutorialName, tutorPage.getPage());
 
         // show the cancel button
         showCancelButton();
     }
 
-    // init page function
-        // remove any current page options
-        // show the first boxes
-        // if all boxes are okayed then update page
-        // have a cancel at the top of the page that allows this to be picked up later
-
     /**
      *
-     * @param name
+     * @param config
+     * @param tutorialName
      */
-    function updatePage(name) {
-        // mark a box as complete via trigger or ok button
-
-        // if all boxes have been marked then show the next page
-    }
-
-    /**
-     *
-     * @param name
-     */
-    function nextPage(name) {
+    function nextPage(config, tutorialName) {
         // remove any current page boxes
+        hidePage(config);
 
-        // show the next boxes
+        // get a count of the tutorial pages
+        var count = tutorialData[tutorialName].boxes.length;
+
+        // increment the page if possible and show the new page if any left to show
+        if (tutorPage.incrementPage(count)) {
+            showPage(config, tutorialName, tutorPage.getPage());
+        }
     }
 
     /**
      *
-     * @param name
+     * @param config
+     * @param tutorialName
      * @param id
      * @returns bool True if the page is shown correctly
      */
-    function showPage(config, name, id) {
+    function showPage(config, tutorialName, id) {
+        // init vars
+        var boxes, page;
+
         // check the name is valid
-        if (!tutorialData[name]) {
+        if (!tutorialData[tutorialName]) {
             return false;
         }
 
         // get the boxes to show and make sure the list of boxes is an array
-        var boxes = tutorialData[name].boxes[id];
+        boxes = tutorialData[tutorialName].boxes[id];
         if (typeof boxes === 'string') {
             boxes = [boxes];
         }
 
         // loop through all available boxes
-        for (var page in boxes) {
+        for (page in boxes) {
             // show each box
-            showBox(config, boxData[boxes[page]]);
+            showBox(config, tutorialName, boxes[page], boxData);
 
             // work out if to show the background
             if (boxData[boxes[page]].needsBg) {
@@ -155,8 +162,10 @@ var Tutor = function($, window) {
      * @param config
      */
     function hidePage(config) {
-        // remove all boxes
-        $('.' + config.boxClass).remove();
+        // remove all boxes that still exist
+        $('.' + config.boxClass).each(function() {
+            tutorDesign.box().closeBox($(this));
+        });
 
         // remove the box backgrounds
         hideBackground(config);
@@ -166,30 +175,50 @@ var Tutor = function($, window) {
     }
 
     /**
+     * Passes the box creation to an external class to make customisation easy
      *
+     * @param config
+     * @param tutorialName
+     * @param boxName
      * @param box
      */
-    function showBox(config, box) {
-        // generate the box
-        // maybe move logic to external class?
-        console.log(box);
+    function showBox(config, tutorialName, boxName, boxes) {
+        // init the promise
+        var box = boxes[boxName], promise = tutorDesign.box().showBox(config, boxName, box);
+
+        // store the promise locally
+        tutorPromise.add(boxName, promise);
+
+        // when the promise is complete, check if we can trigger the next page
+        promise.done(function() {
+            // remove the promise
+            tutorPromise.remove(boxName);
+
+            // check to see if all promises have been complete
+            if (tutorPromise.isEmpty(boxes)) {
+                // trigger the next page. This needs a fraction of a second
+                // timeout or jquery gets the ordering wrong and can delete the
+                // new boxes
+                window.setTimeout(function() {
+                    nextPage(config, tutorialName);
+                }, 1);
+
+            }
+        });
     }
 
     /**
      *
      */
     function showBackground(config) {
-        // check if the background already exists
-
-        // if not then create background
+        tutorDesign.background().showBackground(config);
     }
 
     /**
      *
      */
     function hideBackground(config) {
-        // hides the background
-        $(config.boxBgSelector).remove();
+        tutorDesign.background().removeBackground(config);
     }
 
     function showCancelButton() {
@@ -208,7 +237,7 @@ var Tutor = function($, window) {
      * @return {}
      */
     function getConfig(userConfig) {
-        return $.extend({}, defaultOptions, userConfig);
+        return tutorConfig.merge(defaultOptions, userConfig);
     }
 
     /**
