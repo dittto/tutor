@@ -1,19 +1,42 @@
-var TutorBackground = function($) {
+var TutorBackground = function($, configManager) {
+    // init vars
+    var obj = {}, defaultConfig;
 
-    function show(config) {
-        var $bg = $('.' + config.boxBgClass);
+    /**
+     *
+     * @type {{bgClass: string}}
+     */
+    defaultConfig = {
+        bgClass: 'tutor-box-bg'
+    };
+    configManager.setDefaultConfig(defaultConfig);
+
+    /**
+     *
+     * @param config
+     */
+    obj.show = function(config) {
+        var $bg = $('.' + config.bgClass);
 
         if ($bg.length === 0) {
-            $('body').append('<div class="' + config.boxBgClass + '"></div>');
+            $('body').append('<div class="' + config.bgClass + '"></div>');
         }
-    }
+    };
 
-    function remove(config) {
-        $('.' + config.boxBgClass).remove();
-    }
+    /**
+     *
+     * @param config
+     */
+    obj.remove = function(config) {
+        $('.' + config.bgClass).remove();
+    };
 
+    /**
+     * Public methods
+     */
     return {
-        showBackground: show,
-        removeBackground: remove
+        show: obj.show,
+        remove: obj.remove,
+        getConfig: configManager.getConfig
     }
-}
+};

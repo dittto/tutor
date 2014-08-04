@@ -16,3 +16,8 @@ An idea to help make web applications easier to learn to use. This will show you
 
  - cancel
  - plugin into cookie to save progress
+
+
+
+ - extend all from the same base class that gives getOptions(), setUserOptions() - add to each constructor tutorConfig and {} for the options.
+ -  When show or hide is called, the thing calling will use box.getOptions() which will merge the provided options with default options, or with user options and those provided to getOptions

@@ -1,22 +1,24 @@
 /**
  *
- * @param tutorConfig
+ * @param configManager
  * @param tutorDesign
  * @param tutorPage
  * @param tutorPromise
  * @returns {{init: Function, tutorial: Function, getConfig: Function}}
  * @constructor
  */
-var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
+var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
     // init vars
-    var boxData = [], tutorialData = [], defaultOptions = {}, defaultBoxOptions = {}, defaultPageOptions = {};
+    var obj = {}, boxData = [], tutorialData = [], defaultConfig, defaultBoxOptions = {}, defaultPageOptions = {};
 
-    // init the default options
-    defaultOptions = {
-        boxClass: 'tutor-box',
-        boxBgClass: 'tutor-box-bg',
-        cancelId: 'tutor-cancel-button'
+    /**
+     *
+     * @type {{boxClass: string}}
+     */
+    defaultConfig = {
+        boxClass: 'tutor-box'
     };
+    configManager.setDefaultConfig(defaultConfig);
 
     /**
      * Inits the default box options
@@ -59,7 +61,7 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
      * @param tutorials
      * @param config
      */
-    function init(boxes, tutorials, config) {
+    obj.init = function(boxes, tutorials, config) {
         // init vars
         var boxKey, pageKey;
         boxData = boxes;
@@ -68,56 +70,56 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
         // update the box data to contain default options
         for (boxKey in boxData) {
             if (boxData.hasOwnProperty(boxKey)) {
-                boxData[boxKey] = tutorConfig.merge(defaultBoxOptions, boxData[boxKey]);
+                boxData[boxKey] = configManager.merge(defaultBoxOptions, boxData[boxKey]);
             }
         }
 
         // update the page data to contain default options
         for (pageKey in tutorialData) {
             if (tutorialData.hasOwnProperty(pageKey)) {
-                tutorialData[pageKey] = tutorConfig.merge(defaultPageOptions, tutorialData[pageKey]);
+                tutorialData[pageKey] = configManager.merge(defaultPageOptions, tutorialData[pageKey]);
             }
         }
 
         // remove current page
-        hidePage(config);
-    }
+        obj.hidePage(config);
+    };
 
     /**
      *
      * @param config
      * @param tutorialName
      */
-    function tutorial(config, tutorialName) {
+    obj.tutorial = function(config, tutorialName) {
         // remove any current page options
-        hidePage(config);
+        obj.hidePage(config);
 
         // show the first box
         tutorPromise.reset();
         tutorPage.setPage(0);
-        showPage(config, tutorialName, tutorPage.getPage());
+        obj.showPage(config, tutorialName, tutorPage.getPage());
 
         // show the cancel button
-        showCancelButton();
-    }
+        obj.showCancelButton(config);
+    };
 
     /**
      *
      * @param config
      * @param tutorialName
      */
-    function nextPage(config, tutorialName) {
+    obj.nextPage = function(config, tutorialName) {
         // remove any current page boxes
-        hidePage(config);
+        obj.hidePage(config);
 
         // get a count of the tutorial pages
         var count = tutorialData[tutorialName].boxes.length;
 
         // increment the page if possible and show the new page if any left to show
         if (tutorPage.incrementPage(count)) {
-            showPage(config, tutorialName, tutorPage.getPage());
+            obj.showPage(config, tutorialName, tutorPage.getPage());
         }
-    }
+    };
 
     /**
      *
@@ -126,7 +128,7 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
      * @param id
      * @returns bool True if the page is shown correctly
      */
-    function showPage(config, tutorialName, id) {
+    obj.showPage = function(config, tutorialName, id) {
         // init vars
         var boxes, page;
 
@@ -144,35 +146,37 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
         // loop through all available boxes
         for (page in boxes) {
             // show each box
-            showBox(config, tutorialName, boxes[page], boxData);
+            obj.showBox(config, tutorialName, boxes[page], boxData);
 
             // work out if to show the background
             if (boxData[boxes[page]].needsBg) {
-                showBackground(config);
+                obj.showBackground();
             }
         }
 
         // show the cancel button
-        showCancelButton(config);
-    }
+        obj.showCancelButton(config);
+
+        return true;
+    };
 
     /**
      *
      *
      * @param config
      */
-    function hidePage(config) {
+    obj.hidePage = function(config) {
         // remove all boxes that still exist
         $('.' + config.boxClass).each(function() {
             tutorDesign.box().closeBox($(this));
         });
 
         // remove the box backgrounds
-        hideBackground(config);
+        obj.hideBackground();
 
         // hide the cancel button
-        hideCancelButton(config);
-    }
+        obj.hideCancelButton(config);
+    };
 
     /**
      * Passes the box creation to an external class to make customisation easy
@@ -180,11 +184,12 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
      * @param config
      * @param tutorialName
      * @param boxName
-     * @param box
+     * @param boxes
      */
-    function showBox(config, tutorialName, boxName, boxes) {
+    obj.showBox = function(config, tutorialName, boxName, boxes) {
         // init the promise
-        var box = boxes[boxName], promise = tutorDesign.box().showBox(config, boxName, box);
+        var box = boxes[boxName], promise;
+        promise = tutorDesign.box().showBox(config, boxName, box);
 
         // store the promise locally
         tutorPromise.add(boxName, promise);
@@ -200,52 +205,43 @@ var Tutor = function(tutorConfig, tutorDesign, tutorPage, tutorPromise) {
                 // timeout or jquery gets the ordering wrong and can delete the
                 // new boxes
                 window.setTimeout(function() {
-                    nextPage(config, tutorialName);
+                    obj.nextPage(config, tutorialName);
                 }, 1);
 
             }
         });
-    }
+    };
 
     /**
      *
      */
-    function showBackground(config) {
-        tutorDesign.background().showBackground(config);
-    }
+    obj.showBackground = function() {
+        var bg = tutorDesign.background();
+        bg.show(bg.getConfig());
+    };
 
     /**
      *
      */
-    function hideBackground(config) {
-        tutorDesign.background().removeBackground(config);
-    }
+    obj.hideBackground = function() {
+        var bg = tutorDesign.background();
+        bg.remove(bg.getConfig());
+    };
 
-    function showCancelButton() {
-        // this is a cancel button for the tutorial that will pause the tutorial where it is, and allow it to be restarted
-    }
+    obj.showCancelButton = function(config) {
+        tutorDesign.cancel().showCancelButton(config);
+    };
 
-    function hideCancelButton() {
-        // this removes the cancel button
-    }
-
-    /**
-     * Merges the supplied config with the default options to generate a simple
-     * config
-     *
-     * @param userConfig The config supplied by the user
-     * @return {}
-     */
-    function getConfig(userConfig) {
-        return tutorConfig.merge(defaultOptions, userConfig);
-    }
+    obj.hideCancelButton = function(config) {
+        tutorDesign.cancel().hideCancelButton(config);
+    };
 
     /**
      * Public methods
      */
     return {
-        init: init,
-        tutorial: tutorial,
-        getConfig: getConfig
-    };
+        init: obj.init,
+        tutorial: obj.tutorial,
+        getConfig: configManager.getConfig
+    }
 };

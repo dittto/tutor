@@ -4,28 +4,26 @@
  * @constructor
  */
 var TutorPage = function() {
-    /**
-     * The current page number
-     */
-    var pageNum;
+    // init vars
+    var obj = {}, pageNum;
 
     /**
      * Sets the page number for later recall
      *
      * @param page The value to set the page number to
      */
-    function setPage(page) {
+    obj.setPage = function(page) {
         pageNum = page;
-    }
+    };
 
     /**
      * Gets the page number
      *
      * @returns {number}
      */
-    function getPage() {
+    obj.getPage = function() {
         return pageNum;
-    }
+    };
 
     /**
      * Tries to increment the page number and return if this was possible
@@ -33,25 +31,25 @@ var TutorPage = function() {
      * @param maxPages
      * @returns {boolean}
      */
-    function incrementPage(maxPages) {
+    obj.incrementPage = function(maxPages) {
         // get the current page value
-        var current = getPage();
+        var current = obj.getPage();
 
         // increment the page number if possible
         if (current + 1 < maxPages) {
-            setPage(current + 1);
+            obj.setPage(current + 1);
             return true;
         } else {
             return false;
         }
-    }
+    };
 
     /**
      * Public methods
      */
     return {
-        setPage: setPage,
-        getPage: getPage,
-        incrementPage: incrementPage
-    };
+        setPage: obj.setPage,
+        getPage: obj.getPage,
+        incrementPage: obj.incrementPage
+    }
 };

@@ -7,33 +7,36 @@
  * @constructor
  */
 var TutorDesign = function(box, background, cancel) {
+    // init vars
+    var obj = {};
+
     /**
      *
      * @returns TutorBox
      */
-    function getBox() {
+    obj.getBox = function() {
         return box;
-    }
+    };
 
     /**
      *
      * @returns TutorBackground
      */
-    function getBackground() {
+    obj.getBackground = function() {
         return background;
-    }
+    };
 
     /**
      *
      * @returns TutorCancel
      */
-    function getCancel() {
+    obj.getCancel = function() {
         return cancel;
-    }
+    };
 
     return {
-        box: getBox,
-        background: getBackground,
-        cancel: getCancel
+        box: obj.getBox,
+        background: obj.getBackground,
+        cancel: obj.getCancel
     }
-}
+};

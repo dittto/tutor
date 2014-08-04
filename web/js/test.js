@@ -56,12 +56,10 @@ var tutorials = {
     }
 };
 
-var tutorBox = new TutorBox(jQuery);
-var tutorBackground = new TutorBackground(jQuery);
-var tutorCancel = new TutorCancel(jQuery);
+var tutorBox = new TutorBox(jQuery, new TutorConfigManager(jQuery, {}));
+var tutorBackground = new TutorBackground(jQuery, new TutorConfigManager(jQuery, {}));
+var tutorCancel = new TutorCancel(jQuery, new TutorConfigManager(jQuery, {}));
 var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
-
-var tutorConfig = new TutorConfig(jQuery);
 
 var tutorPage = new TutorPage();
 var tutorPromise = new TutorPromise();
@@ -69,11 +67,9 @@ var tutorPromise = new TutorPromise();
 /**
  *
  */
-var tutor = new Tutor(tutorConfig, tutorDesign, tutorPage, tutorPromise);
-var config = tutor.getConfig({});
-tutor.init(boxes, tutorials, config);
-tutor.tutorial(config, 'homepage');
-
+var tutor = new Tutor(new TutorConfigManager(jQuery, {}), tutorDesign, tutorPage, tutorPromise);
+tutor.init(boxes, tutorials, tutor.getConfig());
+tutor.tutorial(tutor.getConfig(), 'homepage');
 
 /**
  *

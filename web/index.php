@@ -33,6 +33,10 @@
             width: 100%;
             z-index: 100;
         }
+
+        .tutor-cancel {
+
+        }
     </style>
 </head>
 <body>
@@ -44,11 +48,11 @@
     <div class="secondBox">Second box</div>
 
     <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/tutor/config/manager.js"></script>
     <script src="/js/tutor/design/box.js"></script>
     <script src="/js/tutor/design/background.js"></script>
     <script src="/js/tutor/design/cancel.js"></script>
     <script src="/js/tutor/design/design.js"></script>
-    <script src="/js/tutor/config/config.js"></script>
     <script src="/js/tutor/objects/page.js"></script>
     <script src="/js/tutor/objects/promises.js"></script>
     <script src="/js/tutor/tutor.js"></script>

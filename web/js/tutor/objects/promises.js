@@ -1,12 +1,11 @@
 /**
  * A store for the promises for all boxes currently being displayed
  *
- *
  * @constructor
  */
 var TutorPromise = function() {
     // init vars
-    var currentPromises = {};
+    var obj = {}, currentPromises = {};
 
     /**
      * Adds a promise to the promise store
@@ -14,32 +13,32 @@ var TutorPromise = function() {
      * @param name The name of the promise to store
      * @param promise The promise to store
      */
-    function add(name, promise) {
+    obj.add = function(name, promise) {
         currentPromises[name] = promise;
-    }
+    };
 
     /**
      * Removes a promise from the store
      *
      * @param name The name of the promise to remove
      */
-    function remove(name) {
+    obj.remove = function(name) {
         delete currentPromises[name];
-    }
+    };
 
     /**
      * Resets the promise store
      */
-    function reset() {
+    obj.reset = function() {
         currentPromises = {};
-    }
+    };
 
     /**
      * Gets the number of promises stored
      *
      * @returns {number}
      */
-    function count() {
+    obj.count = function() {
         // init vars
         var key, size = 0;
 
@@ -51,7 +50,7 @@ var TutorPromise = function() {
         }
 
         return size;
-    }
+    };
 
     /**
      * Checks if the promises store is empty, ignoring those boxes that need to
@@ -61,7 +60,7 @@ var TutorPromise = function() {
      * can ignore autoClose boxes
      * @returns {boolean}
      */
-    function isEmpty(boxes) {
+    obj.isEmpty = function(boxes) {
         // init vars
         var boxName, count = 0;
 
@@ -79,16 +78,16 @@ var TutorPromise = function() {
         }
 
         return count === 0;
-    }
+    };
 
     /**
      * Public methods
      */
     return {
-        add: add,
-        remove: remove,
-        reset: reset,
-        count: count,
-        isEmpty: isEmpty
+        add: obj.add,
+        remove: obj.remove,
+        reset: obj.reset,
+        count: obj.count,
+        isEmpty: obj.isEmpty
     }
-}
+};
