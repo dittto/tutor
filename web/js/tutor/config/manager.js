@@ -1,16 +1,16 @@
 /**
  *
- * @param $
  * @param userConfig
  * @returns {{getConfig: *}}
  * @constructor
  */
-var TutorConfigManager = function($, userConfig) {
+var TutorConfigManager = function(userConfig) {
     // init vars
     var obj = {};
     obj.userConfig = userConfig || {};
     obj.defaultConfig = {};
     obj.config = null;
+    obj.promise = null;
 
     /**
      *
@@ -53,7 +53,8 @@ var TutorConfigManager = function($, userConfig) {
     obj.getConfig = function(overrideConfig, forceOverride) {
         // if not set, recalculate the config
         if (obj.config === null || forceOverride === true) {
-            obj.config = $.extend({}, obj.getDefaultConfig(), obj.getUserConfig(), overrideConfig || {});
+            obj.config = obj.merge(obj.getDefaultConfig(), obj.getUserConfig());
+            obj.config = obj.merge(obj.config, overrideConfig || {});
         }
 
         return obj.config;
@@ -66,7 +67,24 @@ var TutorConfigManager = function($, userConfig) {
      * @returns {*}
      */
     obj.merge = function(defaultValues, overrideValues) {
-        return $.extend({}, defaultValues, overrideValues);
+        // init vars
+        var config = {}, key;
+
+        // update config with the values
+        for (key in defaultValues) {
+            if (defaultValues.hasOwnProperty(key)) {
+                config[key] = defaultValues[key];
+            }
+        }
+
+        // update with the override values
+        for (key in overrideValues) {
+            if (overrideValues.hasOwnProperty(key)) {
+                config[key] = overrideValues[key];
+            }
+        }
+
+        return config;
     };
 
     /**

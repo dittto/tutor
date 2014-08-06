@@ -4,21 +4,14 @@
  * @param tutorDesign
  * @param tutorPage
  * @param tutorPromise
- * @returns {{init: Function, tutorial: Function, getConfig: Function}}
+ * @param tutorPromises
+ * @param store
+ * @returns {{init: Function, tutorial: Function}}
  * @constructor
  */
-var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
+var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorPromises, store) {
     // init vars
-    var obj = {}, boxData = [], tutorialData = [], defaultConfig, defaultBoxOptions = {}, defaultPageOptions = {};
-
-    /**
-     *
-     * @type {{boxClass: string}}
-     */
-    defaultConfig = {
-        boxClass: 'tutor-box'
-    };
-    configManager.setDefaultConfig(defaultConfig);
+    var obj = {}, boxData = [], tutorialData = [], defaultBoxOptions = {}, defaultPageOptions = {};
 
     /**
      * Inits the default box options
@@ -52,6 +45,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
 
     // init the default page options
     defaultPageOptions = {
+        hideCancelBox: false,
         boxes: []
     };
 
@@ -59,13 +53,15 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
      *
      * @param boxes
      * @param tutorials
-     * @param config
      */
-    obj.init = function(boxes, tutorials, config) {
+    obj.init = function(boxes, tutorials) {
         // init vars
         var boxKey, pageKey;
         boxData = boxes;
         tutorialData = tutorials;
+
+        // init the promise
+        tutorPromise.init();
 
         // update the box data to contain default options
         for (boxKey in boxData) {
@@ -82,130 +78,142 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
         }
 
         // remove current page
-        obj.hidePage(config);
+        obj.hidePage();
+
+        return tutorPromise.getPromise();
     };
 
     /**
      *
-     * @param config
      * @param tutorialName
      */
-    obj.tutorial = function(config, tutorialName) {
+    obj.tutorial = function(tutorialName) {
         // remove any current page options
-        obj.hidePage(config);
+        obj.hidePage();
 
-        // show the first box
-        tutorPromise.reset();
-        tutorPage.setPage(0);
-        obj.showPage(config, tutorialName, tutorPage.getPage());
-
-        // show the cancel button
-        obj.showCancelButton(config);
+        // check the store to see if to skip this tutorial
+        if (!store.isComplete(tutorialName)) {
+            // show the first box
+            tutorPromises.reset();
+            tutorPage.setPage(store.getPage(tutorialName));
+            obj.showPage(tutorialName, tutorPage.getPage());
+        }
     };
 
     /**
      *
-     * @param config
      * @param tutorialName
      */
-    obj.nextPage = function(config, tutorialName) {
+    obj.nextPage = function(tutorialName) {
         // remove any current page boxes
-        obj.hidePage(config);
+        obj.hidePage();
 
         // get a count of the tutorial pages
         var count = tutorialData[tutorialName].boxes.length;
 
         // increment the page if possible and show the new page if any left to show
         if (tutorPage.incrementPage(count)) {
-            obj.showPage(config, tutorialName, tutorPage.getPage());
+            obj.showPage(tutorialName, tutorPage.getPage());
+        } else {
+            tutorPromise.resolve('complete', {tutorial: tutorialName});
         }
     };
 
     /**
      *
-     * @param config
      * @param tutorialName
      * @param id
      * @returns bool True if the page is shown correctly
      */
-    obj.showPage = function(config, tutorialName, id) {
+    obj.showPage = function(tutorialName, id) {
         // init vars
-        var boxes, page;
+        var boxes, page, tutorial;
+
+        // update the page being shown against stored
+        store.update(tutorialName, id);
 
         // check the name is valid
-        if (!tutorialData[tutorialName]) {
+        tutorial = tutorialData[tutorialName];
+        if (!tutorial) {
+            tutorPromise.resolve('tutorialNotFound', {tutorial: tutorialName});
             return false;
+        } else {
+            tutorPromise.notify('showPage', {tutorial: tutorialName, pageNum: id});
         }
 
         // get the boxes to show and make sure the list of boxes is an array
-        boxes = tutorialData[tutorialName].boxes[id];
+        boxes = tutorial.boxes[id];
         if (typeof boxes === 'string') {
             boxes = [boxes];
         }
 
         // loop through all available boxes
         for (page in boxes) {
-            // show each box
-            obj.showBox(config, tutorialName, boxes[page], boxData);
+            if (boxes.hasOwnProperty(page)) {
+                // show each box
+                obj.showBox(tutorialName, boxes[page], boxData);
 
-            // work out if to show the background
-            if (boxData[boxes[page]].needsBg) {
-                obj.showBackground();
+                // work out if to show the background
+                if (boxData[boxes[page]].needsBg) {
+                    obj.showBackground();
+                }
             }
         }
 
-        // show the cancel button
-        obj.showCancelButton(config);
+        // show the cancel buttons
+        if (tutorial.hideCancelBox === false) {
+            obj.showCancelButton(tutorialName);
+        }
 
         return true;
     };
 
     /**
      *
-     *
-     * @param config
      */
-    obj.hidePage = function(config) {
+    obj.hidePage = function() {
         // remove all boxes that still exist
-        $('.' + config.boxClass).each(function() {
-            tutorDesign.box().closeBox($(this));
-        });
+        var box = tutorDesign.box();
+        box.closeBoxes(box.getConfig());
 
         // remove the box backgrounds
         obj.hideBackground();
 
         // hide the cancel button
-        obj.hideCancelButton(config);
+        obj.hideCancelButton();
     };
 
     /**
      * Passes the box creation to an external class to make customisation easy
      *
-     * @param config
      * @param tutorialName
      * @param boxName
      * @param boxes
      */
-    obj.showBox = function(config, tutorialName, boxName, boxes) {
+    obj.showBox = function(tutorialName, boxName, boxes) {
         // init the promise
         var box = boxes[boxName], promise;
-        promise = tutorDesign.box().showBox(config, boxName, box);
+        var boxObject = tutorDesign.box();
+        promise = boxObject.showBox(boxObject.getConfig(), boxName, box);
 
         // store the promise locally
-        tutorPromise.add(boxName, promise);
+        tutorPromises.add(boxName, promise);
 
         // when the promise is complete, check if we can trigger the next page
         promise.done(function() {
             // remove the promise
-            tutorPromise.remove(boxName);
+            tutorPromises.remove(boxName);
+
+            // update the main promise
+            tutorPromise.notify('completedBox', {tutorial: tutorialName, box: boxName});
 
             // check to see if all promises have been complete
-            if (tutorPromise.isEmpty(boxes)) {
+            if (tutorPromises.isEmpty(boxes)) {
                 // trigger the next page. This needs a fraction of a second
                 // timeout or jquery gets the ordering wrong and can delete the
                 // new boxes
                 window.setTimeout(function() {
-                    obj.nextPage(config, tutorialName);
+                    obj.nextPage(tutorialName);
                 }, 1);
 
             }
@@ -228,12 +236,63 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
         bg.remove(bg.getConfig());
     };
 
-    obj.showCancelButton = function(config) {
-        tutorDesign.cancel().showCancelButton(config);
+    /**
+     *
+     * @param tutorialName
+     */
+    obj.showCancelButton = function(tutorialName) {
+        // init vars
+        var cancel, promise;
+
+        // show the cancel buttons
+        cancel = tutorDesign.cancel();
+        promise = cancel.showCancelButton(cancel.getConfig());
+
+        obj.handleCancelButtons(promise, tutorialName);
     };
 
-    obj.hideCancelButton = function(config) {
-        tutorDesign.cancel().hideCancelButton(config);
+    /**
+     *
+     */
+    obj.hideCancelButton = function() {
+        var cancel = tutorDesign.cancel();
+        cancel.hideCancelButton(cancel.getConfig());
+    };
+
+    /**
+     *
+     * @param promise
+     */
+    obj.handleCancelButtons = function(promise, tutorialName) {
+        // handle the button responses
+        promise.progress(function(type) {
+            // hide the current page
+            obj.hidePage();
+
+            // handle the button responses
+            if (type === 'pause') {
+                // save current page number
+                store.update(tutorialName, tutorPage.getPage());
+
+                // trigger the pause tutorial
+                obj.tutorial('pause');
+            }
+            else if (type === 'reset') {
+                // save the reset page number
+                store.update(tutorialName, 0);
+
+                // trigger the tutorial again
+                obj.tutorial(tutorialName);
+            }
+            else if (type === 'cancel') {
+                // save the tutorial as complete
+                store.update(tutorialName, 0);
+                store.complete(tutorialName);
+
+                // trigger the cancel tutorial
+                obj.tutorial('cancel');
+            }
+        });
     };
 
     /**
@@ -241,7 +300,6 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise) {
      */
     return {
         init: obj.init,
-        tutorial: obj.tutorial,
-        getConfig: configManager.getConfig
+        tutorial: obj.tutorial
     }
 };

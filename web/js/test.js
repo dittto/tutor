@@ -43,6 +43,20 @@ var boxes = {
         isCentral: true,
         contentText: 'Done now, thank you!',
         needsBg: true
+    },
+
+    pause: {
+        maxWidth: 300,
+        isCentral: true,
+        contentText: 'This tutorial has now been paused. You can resume this by doing blah.',
+        needsBg: true
+    },
+
+    cancel: {
+        maxWidth: 300,
+        isCentral: true,
+        contentText: 'This tutorial has now been cancelled. You can restart this by doing x.',
+        needsBg: true
     }
 };
 
@@ -53,23 +67,35 @@ var boxes = {
 var tutorials = {
     homepage: {
         boxes: ['testBox', 'blueBox', ['above', 'below', 'autoClose'], 'thankYou']
+    },
+    pause: {
+        hideCancelBox: true,
+        boxes: ['pause']
+    },
+    cancel: {
+        hideCancelBox: true,
+        boxes: ['cancel']
     }
 };
 
-var tutorBox = new TutorBox(jQuery, new TutorConfigManager(jQuery, {}));
-var tutorBackground = new TutorBackground(jQuery, new TutorConfigManager(jQuery, {}));
-var tutorCancel = new TutorCancel(jQuery, new TutorConfigManager(jQuery, {}));
+var tutorBox = new TutorBox(jQuery, new TutorConfigManager());
+var tutorBackground = new TutorBackground(jQuery, new TutorConfigManager());
+var tutorCancel = new TutorCancel(jQuery, new TutorConfigManager());
 var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
-
-var tutorPage = new TutorPage();
-var tutorPromise = new TutorPromise();
 
 /**
  *
  */
-var tutor = new Tutor(new TutorConfigManager(jQuery, {}), tutorDesign, tutorPage, tutorPromise);
-tutor.init(boxes, tutorials, tutor.getConfig());
-tutor.tutorial(tutor.getConfig(), 'homepage');
+var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromises(), new TutorStore(jQuery));
+var promise = tutor.init(boxes, tutorials);
+tutor.tutorial('homepage');
+
+promise.progress(function(args) {
+    console.log(args);
+});
+promise.done(function(args) {
+    console.log(args);
+});
 
 /**
  *

@@ -1,6 +1,6 @@
 var TutorCancel = function($, configManager) {
     // init vars
-    var obj = {}, defaultConfig;
+    var obj = {}, defaultConfig, config;
 
     /**
      *
@@ -14,24 +14,62 @@ var TutorCancel = function($, configManager) {
     };
     configManager.setDefaultConfig(defaultConfig);
 
+    // set up events
+    config = configManager.getConfig();
+    $('body').on({click: function() {obj.handlePause()}}, '#' + config.pauseId);
+    $('body').on({click: function() {obj.handleReset()}}, '#' + config.resetId);
+    $('body').on({click: function() {obj.handleCancel()}}, '#' + config.cancelId);
+
+    /**
+     *
+     * @param config
+     * @returns {Deferred}
+     */
     obj.showCancelButton = function(config) {
-        var $cancel = $('#' + config.cancelId);
+        // try and find the cancel box
+        var $cancel = $('#' + config.id);
 
+        // add the cancel box if not already added
         if ($cancel.length === 0) {
-            $('body').append('<div id="' + config.cancelId + '"><button id="' + config.pauseId + '">Pause</button>' +
-                '<button id="' + config.resetId + '">Reset</button><button id="' + config.cancelId + '">Cancel</button></div>');
+            // add the box to the page
+            $('body').append('<div id="' + config.id + '"><div><button id="' + config.pauseId + '">Pause</button>' +
+                '<button id="' + config.resetId + '">Reset</button><button id="' + config.cancelId + '">Cancel</button></div></div>');
+
+            // set up the deferred
+            obj.promise = $.Deferred();
         }
+
+        return obj.promise;
     };
 
+    /**
+     *
+     * @param config
+     */
     obj.hideCancelButton = function(config) {
-
+        $('#' + config.id).remove();
     };
 
-    // handle pause button
+    /**
+     *
+     */
+    obj.handlePause = function() {
+        obj.promise.notify('pause');
+    };
 
-    // handle reset button
+    /**
+     *
+     */
+    obj.handleReset = function() {
+        obj.promise.notify('reset');
+    };
 
-    // handle cancel button
+    /**
+     *
+     */
+    obj.handleCancel = function() {
+        obj.promise.notify('cancel');
+    };
 
     /**
      * Public methods

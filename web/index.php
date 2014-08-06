@@ -34,8 +34,17 @@
             z-index: 100;
         }
 
-        .tutor-cancel {
+        #tutor-cancel {
+            position: fixed;
+            left: 0;
+            text-align: center;
+            top: 0;
+            width: 100%;
+            z-index: 400;
+        }
 
+        #tutor-cancel div {
+            display: inline-block;
         }
     </style>
 </head>
@@ -48,12 +57,15 @@
     <div class="secondBox">Second box</div>
 
     <script src="/js/jquery-1.11.1.min.js"></script>
+    <script src="/js/jquery.cookie.js"></script>
     <script src="/js/tutor/config/manager.js"></script>
     <script src="/js/tutor/design/box.js"></script>
     <script src="/js/tutor/design/background.js"></script>
     <script src="/js/tutor/design/cancel.js"></script>
     <script src="/js/tutor/design/design.js"></script>
     <script src="/js/tutor/objects/page.js"></script>
+    <script src="/js/tutor/objects/store.js"></script>
+    <script src="/js/tutor/objects/promise.js"></script>
     <script src="/js/tutor/objects/promises.js"></script>
     <script src="/js/tutor/tutor.js"></script>
     <script src="/js/test.js"></script>

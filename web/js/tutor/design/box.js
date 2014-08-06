@@ -25,6 +25,7 @@ var TutorBox = function($, configManager) {
 
         // init the promise
         promise = new $.Deferred();
+
         // create the box
         boxId = obj.createBox(config, boxName, box);
 
@@ -184,6 +185,10 @@ var TutorBox = function($, configManager) {
      * @param triggerOn The selector to trigger all events on
      */
     obj.initButtonEvent = function(buttonId, buttonEvent, triggerOn) {
+        // remove old events for the button
+        $('body').off('click', '#' + buttonId);
+
+        // setup the new event
         $('body').on({click: function() {
             $(triggerOn).trigger(buttonEvent);
         }}, '#' + buttonId);
@@ -257,13 +262,17 @@ var TutorBox = function($, configManager) {
     obj.initEventEndpoints = function(promise, boxName, trigger, triggerOn) {
         // init vars
         var okTrigger, events = {};
+
+        // remove any namespaced events already set up for this box
+        $(triggerOn).off('.tutor-' + boxName);
+
         // define the events for the ok trigger and the defined trigger
         okTrigger = obj.getOkButtonTrigger(boxName);
-        events[okTrigger] = function(e) {
+        events[okTrigger + '.tutor-' + boxName] = function(e) {
             obj.triggerBoxComplete(promise, boxName);
         };
         if (!!trigger) {
-            events[trigger] = function(e) {
+            events[trigger + '.tutor-' + boxName] = function(e) {
                 obj.triggerBoxComplete(promise, boxName);
             };
         }
@@ -295,8 +304,24 @@ var TutorBox = function($, configManager) {
         $box.remove();
     };
 
+    /**
+     * Closes all boxes open
+     *
+     * @param config The config containing the class
+     */
+    obj.closeBoxes = function(config) {
+        $('.' + config.boxClass).each(function() {
+            obj.closeBox($(this));
+        });
+    };
+
+    /**
+     * Public methods
+     */
     return {
         showBox: obj.showBox,
-        closeBox: obj.closeBox
+        closeBox: obj.closeBox,
+        closeBoxes: obj.closeBoxes,
+        getConfig: configManager.getConfig
     }
 };

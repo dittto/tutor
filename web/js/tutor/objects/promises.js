@@ -3,7 +3,7 @@
  *
  * @constructor
  */
-var TutorPromise = function() {
+var TutorPromises = function() {
     // init vars
     var obj = {}, currentPromises = {};
 
