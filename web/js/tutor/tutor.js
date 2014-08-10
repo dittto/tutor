@@ -4,12 +4,12 @@
  * @param tutorDesign
  * @param tutorPage
  * @param tutorPromise
- * @param tutorPromises
+ * @param tutorPromiseStore
  * @param store
  * @returns {{init: Function, tutorial: Function}}
  * @constructor
  */
-var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorPromises, store) {
+var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorPromiseStore, store) {
     // init vars
     var obj = {}, boxData = [], tutorialData = [], defaultBoxOptions = {}, defaultPageOptions = {};
 
@@ -86,15 +86,17 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
     /**
      *
      * @param tutorialName
+     * @param forceIfComplete
      */
-    obj.tutorial = function(tutorialName) {
+    obj.tutorial = function(tutorialName, forceIfComplete) {
         // remove any current page options
         obj.hidePage();
 
         // check the store to see if to skip this tutorial
-        if (!store.isComplete(tutorialName)) {
+        if (!store.isComplete(tutorialName) || forceIfComplete === true) {
             // show the first box
-            tutorPromises.reset();
+            store.reset(tutorialName);
+            tutorPromiseStore.reset();
             tutorPage.setPage(store.getPage(tutorialName));
             obj.showPage(tutorialName, tutorPage.getPage());
         }
@@ -116,6 +118,8 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
             obj.showPage(tutorialName, tutorPage.getPage());
         } else {
             tutorPromise.resolve('complete', {tutorial: tutorialName});
+            store.complete(tutorialName);
+            store.update(tutorialName, 0);
         }
     };
 
@@ -197,18 +201,18 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
         promise = boxObject.showBox(boxObject.getConfig(), boxName, box);
 
         // store the promise locally
-        tutorPromises.add(boxName, promise);
+        tutorPromiseStore.add(boxName, promise);
 
         // when the promise is complete, check if we can trigger the next page
         promise.done(function() {
             // remove the promise
-            tutorPromises.remove(boxName);
+            tutorPromiseStore.remove(boxName);
 
             // update the main promise
             tutorPromise.notify('completedBox', {tutorial: tutorialName, box: boxName});
 
             // check to see if all promises have been complete
-            if (tutorPromises.isEmpty(boxes)) {
+            if (tutorPromiseStore.isEmpty(boxes)) {
                 // trigger the next page. This needs a fraction of a second
                 // timeout or jquery gets the ordering wrong and can delete the
                 // new boxes
@@ -273,6 +277,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
             if (type === 'pause') {
                 // save current page number
                 store.update(tutorialName, tutorPage.getPage());
+                store.complete(tutorialName);
 
                 // trigger the pause tutorial
                 obj.tutorial('pause');

@@ -1,4 +1,12 @@
-var TutorBox = function($, configManager) {
+/**
+ *
+ * @param $
+ * @param configManager
+ * @param promiseFactory
+ * @returns {{showBox: (*|Function), closeBox: Function, closeBoxes: Function, getConfig: *}}
+ * @constructor
+ */
+var TutorBox = function($, configManager, promiseFactory) {
     // init vars
     var obj = {}, defaultConfig;
 
@@ -17,14 +25,14 @@ var TutorBox = function($, configManager) {
      * @param config The config for boxes
      * @param boxName The name of the box to create
      * @param box The options for the box
-     * @returns {$.Deferred}
+     * @returns {promiseFactory.init}
      */
     obj.showBox = function(config, boxName, box) {
         // init vars
-        var promise, boxId;
+        var tutorPromise, boxId;
 
         // init the promise
-        promise = new $.Deferred();
+        tutorPromise = new promiseFactory.init();
 
         // create the box
         boxId = obj.createBox(config, boxName, box);
@@ -36,9 +44,9 @@ var TutorBox = function($, configManager) {
         obj.initButtonEvents(boxName, box.buttonList, !box.autoClose, box.triggerOn);
 
         // add event endpoints
-        obj.initEventEndpoints(promise, boxName, box.trigger, box.triggerOn);
+        obj.initEventEndpoints(tutorPromise, boxName, box.trigger, box.triggerOn);
 
-        return promise;
+        return tutorPromise.getPromise();
     };
 
     /**
@@ -253,13 +261,12 @@ var TutorBox = function($, configManager) {
     /**
      * Sets up the event capture for the box
      *
-     * @param promise The promise to complete when the box has been triggered
-     * successfully
+     * @param tutorPromise A wrapper for a promise
      * @param boxName The name of the box
      * @param trigger The possible trigger that will close this box
      * @param triggerOn The element to store these triggers against
      */
-    obj.initEventEndpoints = function(promise, boxName, trigger, triggerOn) {
+    obj.initEventEndpoints = function(tutorPromise, boxName, trigger, triggerOn) {
         // init vars
         var okTrigger, events = {};
 
@@ -269,11 +276,11 @@ var TutorBox = function($, configManager) {
         // define the events for the ok trigger and the defined trigger
         okTrigger = obj.getOkButtonTrigger(boxName);
         events[okTrigger + '.tutor-' + boxName] = function(e) {
-            obj.triggerBoxComplete(promise, boxName);
+            obj.triggerBoxComplete(tutorPromise, boxName);
         };
         if (!!trigger) {
             events[trigger + '.tutor-' + boxName] = function(e) {
-                obj.triggerBoxComplete(promise, boxName);
+                obj.triggerBoxComplete(tutorPromise, boxName);
             };
         }
 
@@ -284,12 +291,12 @@ var TutorBox = function($, configManager) {
     /**
      * Triggers the box to close and updated the deferred object
      *
-     * @param promise The deferred promise of this box closing
+     * @param tutorPromise A wrapper for a promise
      * @param boxName The name of the box in this tutorial
      */
-    obj.triggerBoxComplete = function(promise, boxName) {
+    obj.triggerBoxComplete = function(tutorPromise, boxName) {
         // flag box as complete
-        promise.resolve();
+        tutorPromise.resolve('boxOk', {name: boxName});
 
         // close box
         obj.closeBox($('#' + obj.getBoxId(boxName)));

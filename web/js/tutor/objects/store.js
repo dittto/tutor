@@ -44,12 +44,21 @@ var TutorStore = function($) {
     };
 
     /**
+     *
+     * @param tutorial
+     */
+    obj.reset = function(tutorial) {
+        $.cookie('tutor-' + tutorial + '-complete', '');
+    };
+
+    /**
      * Public methods
      */
     return {
         update: obj.update,
         getPage: obj.getPage,
         complete: obj.complete,
-        isComplete: obj.isComplete
+        isComplete: obj.isComplete,
+        reset: obj.reset
     };
 };

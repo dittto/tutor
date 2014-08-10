@@ -56,6 +56,9 @@
     <div class="firstBox">First box</div>
     <div class="secondBox">Second box</div>
 
+    <div class="startTutorial">Homepage</div>
+    <div class="startReversi">Reversi</div>
+
     <script src="/js/jquery-1.11.1.min.js"></script>
     <script src="/js/jquery.cookie.js"></script>
     <script src="/js/tutor/config/manager.js"></script>
@@ -66,7 +69,8 @@
     <script src="/js/tutor/objects/page.js"></script>
     <script src="/js/tutor/objects/store.js"></script>
     <script src="/js/tutor/objects/promise.js"></script>
-    <script src="/js/tutor/objects/promises.js"></script>
+    <script src="/js/tutor/objects/promisefactory.js"></script>
+    <script src="/js/tutor/objects/promisestore.js"></script>
     <script src="/js/tutor/tutor.js"></script>
     <script src="/js/test.js"></script>
 </body>

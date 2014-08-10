@@ -75,10 +75,13 @@ var tutorials = {
     cancel: {
         hideCancelBox: true,
         boxes: ['cancel']
+    },
+    reversi: {
+        boxes: ['blueBox', 'above']
     }
 };
 
-var tutorBox = new TutorBox(jQuery, new TutorConfigManager());
+var tutorBox = new TutorBox(jQuery, new TutorConfigManager(), new TutorPromiseFactory(jQuery, TutorPromise));
 var tutorBackground = new TutorBackground(jQuery, new TutorConfigManager());
 var tutorCancel = new TutorCancel(jQuery, new TutorConfigManager());
 var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
@@ -86,7 +89,7 @@ var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
 /**
  *
  */
-var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromises(), new TutorStore(jQuery));
+var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromiseStore(), new TutorStore(jQuery));
 var promise = tutor.init(boxes, tutorials);
 tutor.tutorial('homepage');
 
@@ -95,6 +98,14 @@ promise.progress(function(args) {
 });
 promise.done(function(args) {
     console.log(args);
+});
+
+$('.startTutorial').click(function() {
+    tutor.tutorial('homepage', true);
+});
+
+$('.startReversi').click(function() {
+    tutor.tutorial('reversi', true);
 });
 
 /**
