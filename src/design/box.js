@@ -63,12 +63,29 @@ var TutorBox = function($, configManager, promiseFactory) {
 
         // add the box
         $('body').append(
-            '<div id="' + boxId + '" class="' + config.boxClass + '">' +
+            '<div id="' + boxId + '" class="' + config.boxClass + ' panel panel-default">' +
+            obj.getTitle(box.contentTitle) +
+            '<div class="panel-body">' +
             obj.getContent(box.content, box.contentText) +
             obj.getButtons(boxName, box.buttonList, !box.autoClose && !box.trigger, box.buttonText) +
-            '</div>');
+            '</div></div>');
 
         return boxId;
+    };
+
+    /**
+     * Creates a title section for the box
+     *
+     * @param text The text to put in the title
+     * @returns {string}
+     */
+    obj.getTitle = function(text) {
+        var title = '';
+        if (text) {
+            title = '<div class="panel-heading"><h3 class="panel-title">' + text + '</h3></div>';
+        }
+
+        return title;
     };
 
     /**
@@ -112,15 +129,20 @@ var TutorBox = function($, configManager, promiseFactory) {
             }
 
             // create the button
-            content += '<button id="' + obj.getButtonId(boxName, buttonEvent) + '">' + buttons[buttonEvent] + '</button>';
+            content += '<button id="' + obj.getButtonId(boxName, buttonEvent) + '" class="btn btn-default">' + buttons[buttonEvent] + '</button>';
         }
 
         // if an ok button is required, then add
         if (hasOk) {
-            content += '<button id="' + obj.getButtonId(boxName, obj.getOkButtonTrigger(boxName)) + '">' + okText + '</button>';
+            content += '<button id="' + obj.getButtonId(boxName, obj.getOkButtonTrigger(boxName)) + '" class="btn btn-success">' + okText + ' <span class="glyphicon glyphicon-ok"></span></button>';
         }
 
-        return '<div class="tutor-box-buttons">' + content + '</div>';
+        // add the wrapper if content
+        if (content) {
+            content = '<div class="tutor-box-buttons btn-group pull-right">' + content + '</div>';
+        }
+
+        return content;
     };
 
     /**

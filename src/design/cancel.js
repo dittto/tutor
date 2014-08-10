@@ -32,8 +32,10 @@ var TutorCancel = function($, configManager) {
         // add the cancel box if not already added
         if ($cancel.length === 0) {
             // add the box to the page
-            $('body').append('<div id="' + config.id + '"><div><button id="' + config.pauseId + '">Pause</button>' +
-                '<button id="' + config.resetId + '">Reset</button><button id="' + config.cancelId + '">Cancel</button></div></div>');
+            $('body').append('<div id="' + config.id + '"><div class="btn-group">' +
+                '<button id="' + config.pauseId + '" class="btn btn-default">Pause <span class="glyphicon glyphicon-pause"></span></button>' +
+                '<button id="' + config.resetId + '" class="btn btn-default">Reset <span class="glyphicon glyphicon-repeat"></span></button>' +
+                '<button id="' + config.cancelId + '" class="btn btn-default">Cancel <span class="glyphicon glyphicon-remove"></span></button></div></div>');
 
             // set up the deferred
             obj.promise = $.Deferred();

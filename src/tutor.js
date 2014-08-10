@@ -33,6 +33,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
         parentObject: '.tutor-box-parent',
         buttonList: {},
         buttonText: 'Ok',
+        contentTitle: '',
         content: '',
         contentText: '',
         trigger: '',

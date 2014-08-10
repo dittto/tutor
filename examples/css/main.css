@@ -1,0 +1,82 @@
+.body {
+    background: #303030;
+}
+
+.tutor-hide {
+    display: none;
+}
+
+.tutor-box {
+    background: rgba(44, 62, 80, 1.0);
+    color: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 300;
+}
+
+.tutor-box-buttons {
+    padding-top: 10px;
+}
+
+.tutor-box-central {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 400;
+}
+
+.tutor-box-bg {
+    background: rgba(44, 62, 80, 0.3);
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+#tutor-cancel {
+    background: rgba(52, 73, 94, 1.0);
+    padding: 10px 0;
+    position: fixed;
+    left: 0;
+    text-align: center;
+    top: 0;
+    width: 100%;
+    z-index: 400;
+}
+
+#tutor-cancel div {
+    display: inline-block;
+}
+
+#tutor-cancel .btn-default {
+    background-color: #e74c3c;
+    border-color: #c0392b;
+    color: #ffffff;
+}
+
+#tutor-cancel .btn-default:hover {
+    background-color: #f75c4c;
+}
+
+.blue-box {
+    color: #ffffff;
+    background: rgba(52, 152, 219, 1.0);
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.green-box {
+    color: #ffffff;
+    background: rgba(46, 204, 113, 1.0);
+    height: 100px;
+    line-height: 100px;
+    text-align: center;
+}
+
+.test-box-row {
+    padding-bottom: 20px;
+}

@@ -17,7 +17,6 @@ An idea to help make web applications easier to learn to use. This will show you
  - Bootstrap the demo
  - Jasmine tests
  - Finish doc blocks
- - Rearrange JS to move tutor into src folder and minified versions into lib/tutor, and jquery stuff and example files into subfolder and specrunner into root
 
 ## Future improvements
 

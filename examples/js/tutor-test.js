@@ -4,7 +4,7 @@
 var boxes = {
     testBox: {
         maxWidth: 250,
-        buttonList: {extraButton: 'Do something'},
+        buttonList: {extraButton: 'Some other button'},
         buttonText: 'Ok',
         content: '#textPageContent',
         isCentral: true,
@@ -14,20 +14,20 @@ var boxes = {
     blueBox: {
         maxWidth: 300,
         isCentral: true,
-        contentText: 'Click on the blue box',
+        contentText: 'Click on the image to continue',
         trigger: 'blue-box-trigger'
     },
 
     above: {
         maxWidth: 200,
         parentObject: '.firstBox',
-        contentText: 'Humpty dumpty sat on the wall'
+        contentText: 'This box should be above the blue square.'
     },
 
     below: {
         maxWidth: 400,
         parentObject: '.secondBox',
-        contentText: 'How much is that doggy in the window?',
+        contentText: 'And this box should be below the green box, so it doesn\'t clash with blue\'s box',
         align: 'bottom'
     },
 
@@ -77,7 +77,7 @@ var tutorials = {
         boxes: ['cancel']
     },
     reversi: {
-        boxes: ['blueBox', 'above']
+        boxes: ['blueBox', 'below']
     }
 };
 

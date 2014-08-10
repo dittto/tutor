@@ -1,77 +1,67 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
     <title>Tutor test</title>
-
-    <style>
-        .tutor-hide {
-            display: none;
-        }
-
-        .tutor-box {
-            background: #333333;
-            color: #ffffff;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 300;
-        }
-
-        .tutor-box-central {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            z-index: 200;
-        }
-
-        .tutor-box-bg {
-            background: rgba(255, 255, 255, 0.6);
-            height: 100%;
-            left: 0;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-        }
-
-        #tutor-cancel {
-            position: fixed;
-            left: 0;
-            text-align: center;
-            top: 0;
-            width: 100%;
-            z-index: 400;
-        }
-
-        #tutor-cancel div {
-            display: inline-block;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="../lib/bootstrap-3.2.0-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body>
-    <div id="textPageContent" class="tutor-hide">Main box</div>
 
-    <div id="testPage" style="margin-top: 200px; height: 100px; width: 100px; background: cornflowerblue"></div>
+    <div class="container">
+        <div class="row">
 
-    <div class="firstBox">First box</div>
-    <div class="secondBox">Second box</div>
+            <div class="col-md-8">
+                <h2>Main section</h2>
 
-    <div class="startTutorial">Homepage</div>
-    <div class="startReversi">Reversi</div>
+                <div class="jumbotron" id="testPage">
+                    <img src="http://lorempixel.com/800/400/city/" style="height:100%; width: 100%"/>
+                </div>
+
+                <div id="textPageContent" class="tutor-hide">This box is being pulled from the dom to show what can be done with them.</div>
+
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod velit at posuere eleifend.
+                    Donec pharetra ullamcorper lorem, quis posuere urna pellentesque tempus. Pellentesque sit amet laoreet neque.
+                </p>
+
+                <div class="row test-box-row">
+                    <div class="col-md-2 firstBox blue-box">First box</div>
+                    <div class="col-md-2 secondBox green-box">Second box</div>
+                </div>
+
+                <p>
+                    In vulputate justo quis risus vestibulum, id tempor dolor mollis. Aenean dapibus leo ut tellus ultricies congue.
+                    Duis ut tincidunt lorem. Suspendisse pretium augue pharetra libero consequat, sit amet viverra arcu aliquet.
+                    Duis pellentesque ante vitae augue aliquam, et vehicula lorem dapibus. Duis gravida purus orci, quis semper sem vulputate vel.
+                    Etiam viverra turpis dolor, congue placerat lorem euismod sit amet. Aenean sit amet nisi magna.
+                </p>
+
+            </div>
+
+            <div class="col-md-4">
+                <h3>Tutorials</h3>
+                <ul>
+                    <li><div class="startTutorial">First tutorial</div></li>
+                    <li><div class="startReversi">Second tutorial</div></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/jquery.cookie.js"></script>
-    <script src="/src/config/manager.js"></script>
-    <script src="/src/design/box.js"></script>
-    <script src="/src/design/background.js"></script>
-    <script src="/src/design/cancel.js"></script>
-    <script src="/src/design/design.js"></script>
-    <script src="/src/objects/page.js"></script>
-    <script src="/src/objects/store.js"></script>
-    <script src="/src/objects/promise.js"></script>
-    <script src="/src/objects/promisefactory.js"></script>
-    <script src="/src/objects/promisestore.js"></script>
-    <script src="/src/tutor.js"></script>
+    <script src="../src/config/manager.js"></script>
+    <script src="../src/design/box.js"></script>
+    <script src="../src/design/background.js"></script>
+    <script src="../src/design/cancel.js"></script>
+    <script src="../src/design/design.js"></script>
+    <script src="../src/objects/page.js"></script>
+    <script src="../src/objects/store.js"></script>
+    <script src="../src/objects/promise.js"></script>
+    <script src="../src/objects/promisefactory.js"></script>
+    <script src="../src/objects/promisestore.js"></script>
+    <script src="../src/tutor.js"></script>
     <script src="js/tutor-test.js"></script>
 </body>
 </html>
