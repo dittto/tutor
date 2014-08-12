@@ -5,7 +5,7 @@
  */
 var TutorPage = function() {
     // init vars
-    var obj = {}, pageNum;
+    var obj = {}, pageNum = 0;
 
     /**
      * Sets the page number for later recall
@@ -13,7 +13,7 @@ var TutorPage = function() {
      * @param page The value to set the page number to
      */
     obj.setPage = function(page) {
-        pageNum = page;
+        pageNum = parseInt(page);
     };
 
     /**

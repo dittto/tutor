@@ -1,10 +1,7 @@
 /**
  *
- * @param $
- * @returns {{update: Function}}
- * @constructor
  */
-var TutorStore = function($) {
+var TutorStore = function(store) {
     // init vars
     var obj = {};
 
@@ -13,8 +10,8 @@ var TutorStore = function($) {
      * @param tutorial
      * @param page
      */
-    obj.update = function(tutorial, page) {
-        $.cookie('tutor-' + tutorial, page);
+    obj.setPage = function(tutorial, page) {
+        store('tutor-' + tutorial, page);
     };
 
     /**
@@ -23,7 +20,7 @@ var TutorStore = function($) {
      * @returns {*}
      */
     obj.getPage = function(tutorial) {
-        var val = $.cookie('tutor-' + tutorial);
+        var val = store('tutor-' + tutorial);
         return typeof val !== 'undefined' ? parseInt(val) : 0;
     };
 
@@ -32,7 +29,7 @@ var TutorStore = function($) {
      * @param tutorial
      */
     obj.complete = function(tutorial) {
-        $.cookie('tutor-' + tutorial + '-complete', true);
+        store('tutor-' + tutorial + '-complete', true);
     };
 
     /**
@@ -40,7 +37,7 @@ var TutorStore = function($) {
      * @returns {boolean}
      */
     obj.isComplete = function(tutorial) {
-        return !!$.cookie('tutor-' + tutorial + '-complete');
+        return !!store('tutor-' + tutorial + '-complete');
     };
 
     /**
@@ -48,14 +45,14 @@ var TutorStore = function($) {
      * @param tutorial
      */
     obj.reset = function(tutorial) {
-        $.cookie('tutor-' + tutorial + '-complete', '');
+        store('tutor-' + tutorial + '-complete', '');
     };
 
     /**
      * Public methods
      */
     return {
-        update: obj.update,
+        setPage: obj.setPage,
         getPage: obj.getPage,
         complete: obj.complete,
         isComplete: obj.isComplete,

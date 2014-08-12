@@ -120,7 +120,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
         } else {
             tutorPromise.resolve('complete', {tutorial: tutorialName});
             store.complete(tutorialName);
-            store.update(tutorialName, 0);
+            store.setPage(tutorialName, 0);
         }
     };
 
@@ -135,7 +135,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
         var boxes, page, tutorial;
 
         // update the page being shown against stored
-        store.update(tutorialName, id);
+        store.setPage(tutorialName, id);
 
         // check the name is valid
         tutorial = tutorialData[tutorialName];
@@ -277,7 +277,7 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
             // handle the button responses
             if (type === 'pause') {
                 // save current page number
-                store.update(tutorialName, tutorPage.getPage());
+                store.setPage(tutorialName, tutorPage.getPage());
                 store.complete(tutorialName);
 
                 // trigger the pause tutorial
@@ -285,14 +285,14 @@ var Tutor = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorP
             }
             else if (type === 'reset') {
                 // save the reset page number
-                store.update(tutorialName, 0);
+                store.setPage(tutorialName, 0);
 
                 // trigger the tutorial again
                 obj.tutorial(tutorialName);
             }
             else if (type === 'cancel') {
                 // save the tutorial as complete
-                store.update(tutorialName, 0);
+                store.setPage(tutorialName, 0);
                 store.complete(tutorialName);
 
                 // trigger the cancel tutorial

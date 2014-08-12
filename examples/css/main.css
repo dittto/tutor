@@ -27,7 +27,7 @@
 }
 
 .tutor-box-bg {
-    background: rgba(44, 62, 80, 0.3);
+    background: rgba(44, 62, 80, 0.6);
     height: 100%;
     left: 0;
     position: fixed;
@@ -79,4 +79,14 @@
 
 .test-box-row {
     padding-bottom: 20px;
+}
+
+.panel-default {
+    border-color: rgba(52, 73, 94, 1.0);
+}
+
+.panel-default > .panel-heading {
+    background: rgba(52, 73, 94, 1.0);
+    border-bottom: none;
+    color: #ffffff;
 }

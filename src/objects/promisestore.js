@@ -63,6 +63,7 @@ var TutorPromiseStore = function() {
     obj.isEmpty = function(boxes) {
         // init vars
         var boxName, count = 0;
+        boxes = boxes || {};
 
         // ignore boxes that have the auto-close flag
         for (boxName in currentPromises) {
@@ -72,7 +73,7 @@ var TutorPromiseStore = function() {
             }
 
             // if not an autoClose box, then count
-            if (boxes[boxName].autoClose === false) {
+            if (typeof boxes[boxName] === 'undefined' || boxes[boxName].autoClose === false) {
                 count ++;
             }
         }

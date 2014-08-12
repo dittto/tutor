@@ -22,4 +22,5 @@ An idea to help make web applications easier to learn to use. This will show you
 
  - Make page scroll to tutorial box if not on display already
  - Add animations object
+ - Split out the html to make it easy to update
  - Add extra box flag so centralised box on small screen becomes catfish

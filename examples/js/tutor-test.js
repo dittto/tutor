@@ -6,6 +6,7 @@ var boxes = {
         maxWidth: 250,
         buttonList: {extraButton: 'Some other button'},
         buttonText: 'Ok',
+        contentTitle: 'Tutorial one',
         content: '#textPageContent',
         isCentral: true,
         needsBg: true
@@ -14,6 +15,7 @@ var boxes = {
     blueBox: {
         maxWidth: 300,
         isCentral: true,
+        contentTitle: 'Stage two: triggers',
         contentText: 'Click on the image to continue',
         trigger: 'blue-box-trigger'
     },
@@ -89,7 +91,7 @@ var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
 /**
  *
  */
-var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromiseStore(), new TutorStore(jQuery));
+var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromiseStore(), new TutorStore(jQuery.cookie));
 var promise = tutor.init(boxes, tutorials);
 tutor.tutorial('homepage');
 
