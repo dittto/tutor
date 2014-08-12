@@ -238,7 +238,7 @@ var TutorBox = function($, configManager, promiseFactory) {
         // calculate the position if the box is meant to be centrally aligned
         $box = $('#' + boxId);
         if (!!boxConfig.isCentral) {
-            return obj.calcBoxPositionCentral($box, boxConfig.maxWidth);
+            return obj.calcBoxPositionCentral($box, boxConfig.maxWidth, !!boxConfig.moveToBottom);
         }
 
         // otherwise calculate the position based on the parent
@@ -265,8 +265,9 @@ var TutorBox = function($, configManager, promiseFactory) {
      *
      * @param $box The jQuery object of the box
      * @param maxWidth The max width of the box
+     * @param moveToBottom A flag to move the box to the bottom of the page
      */
-    obj.calcBoxPositionCentral = function($box, maxWidth) {
+    obj.calcBoxPositionCentral = function($box, maxWidth, moveToBottom) {
         // add a max-width if required
         if (!!maxWidth) {
             $box.css('max-width', maxWidth);
@@ -277,7 +278,7 @@ var TutorBox = function($, configManager, promiseFactory) {
         $box.css('margin-top', -1 * ($box.height() / 2));
 
         // add the centralised class
-        $box.addClass('tutor-box-central');
+        $box.addClass('tutor-box-central' + (moveToBottom ? ' tutor-box-bottom' : ''));
     }
 
     /**

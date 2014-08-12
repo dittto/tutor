@@ -3,7 +3,7 @@
  */
 var TutorStore = function(store) {
     // init vars
-    var obj = {};
+    var obj = {}, prefix = 'tutor-';
 
     /**
      *
@@ -11,7 +11,7 @@ var TutorStore = function(store) {
      * @param page
      */
     obj.setPage = function(tutorial, page) {
-        store('tutor-' + tutorial, page);
+        store(prefix + tutorial, page);
     };
 
     /**
@@ -20,7 +20,7 @@ var TutorStore = function(store) {
      * @returns {*}
      */
     obj.getPage = function(tutorial) {
-        var val = store('tutor-' + tutorial);
+        var val = store(prefix + tutorial);
         return typeof val !== 'undefined' ? parseInt(val) : 0;
     };
 
@@ -29,7 +29,7 @@ var TutorStore = function(store) {
      * @param tutorial
      */
     obj.complete = function(tutorial) {
-        store('tutor-' + tutorial + '-complete', true);
+        store(prefix + tutorial + '-complete', true);
     };
 
     /**
@@ -37,7 +37,7 @@ var TutorStore = function(store) {
      * @returns {boolean}
      */
     obj.isComplete = function(tutorial) {
-        return !!store('tutor-' + tutorial + '-complete');
+        return !!store(prefix + tutorial + '-complete');
     };
 
     /**
@@ -45,7 +45,47 @@ var TutorStore = function(store) {
      * @param tutorial
      */
     obj.reset = function(tutorial) {
-        store('tutor-' + tutorial + '-complete', '');
+        store(prefix + tutorial + '-complete', '');
+    };
+
+    /**
+     *
+     * @param json
+     */
+    obj.import = function(json) {
+        // init vars
+        var key, data;
+        data = JSON.parse(json);
+
+        // save the data to the store
+        for (key in data) {
+            if (data.hasOwnProperty(key)) {
+                store(key, data[key]);
+            }
+        }
+    };
+
+    /**
+     *
+     * @returns {*}
+     */
+    obj.export = function() {
+        // init vars
+        var key, data, regex, results = {};
+        data = store();
+        regex = new RegExp('^' + prefix);
+
+        // get all data with the correct prefix
+        for (key in data) {
+            if (data.hasOwnProperty(key)) {
+                if (key.match(regex)) {
+                    results[key] = data[key];
+                }
+            }
+        }
+
+        // return the json'ed result
+        return JSON.stringify(results);
     };
 
     /**
@@ -56,6 +96,8 @@ var TutorStore = function(store) {
         getPage: obj.getPage,
         complete: obj.complete,
         isComplete: obj.isComplete,
-        reset: obj.reset
+        reset: obj.reset,
+        import: obj.import,
+        export: obj.export
     };
 };

@@ -1,4 +1,5 @@
-var TutorCancel = function($, configManager) {
+
+var TutorCancel = function($, configManager, promiseFactory) {
     // init vars
     var obj = {}, defaultConfig, config;
 
@@ -38,10 +39,10 @@ var TutorCancel = function($, configManager) {
                 '<button id="' + config.cancelId + '" class="btn btn-default">Cancel <span class="glyphicon glyphicon-remove"></span></button></div></div>');
 
             // set up the deferred
-            obj.promise = $.Deferred();
+            obj.promise = new promiseFactory.init();
         }
 
-        return obj.promise;
+        return obj.promise.getPromise();
     };
 
     /**
@@ -56,21 +57,21 @@ var TutorCancel = function($, configManager) {
      *
      */
     obj.handlePause = function() {
-        obj.promise.notify('pause');
+        obj.promise.notify('pause', {});
     };
 
     /**
      *
      */
     obj.handleReset = function() {
-        obj.promise.notify('reset');
+        obj.promise.notify('reset', {});
     };
 
     /**
      *
      */
     obj.handleCancel = function() {
-        obj.promise.notify('cancel');
+        obj.promise.notify('cancel', {});
     };
 
     /**

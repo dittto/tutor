@@ -7,7 +7,8 @@
 }
 
 .tutor-box {
-    background: rgba(44, 62, 80, 1.0);
+    background: rgba(52, 73, 94, 0.96);
+    box-shadow: 3px 3px 5px rgba(44, 62, 80, 0.4);
     color: #ffffff;
     position: absolute;
     top: 0;
@@ -20,10 +21,21 @@
 }
 
 .tutor-box-central {
+    left: 50%;
     position: fixed;
     top: 50%;
-    left: 50%;
     z-index: 400;
+}
+
+@media only screen and (max-width: 992px) {
+    .tutor-box-bottom {
+        bottom: 0;
+        margin-bottom: 0;
+        position: fixed;
+        left: 50%;
+        top: auto;
+        z-index: 400;
+    }
 }
 
 .tutor-box-bg {
@@ -37,7 +49,8 @@
 }
 
 #tutor-cancel {
-    background: rgba(52, 73, 94, 1.0);
+    background: rgba(52, 73, 94, 1);
+    box-shadow: 3px 3px 5px rgba(44, 62, 80, 0.4);
     padding: 10px 0;
     position: fixed;
     left: 0;

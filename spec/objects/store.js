@@ -49,4 +49,19 @@ describe('Tutor Store object', function() {
         expect(this.store.reset('test')).not.toBeDefined();
         expect(this.spy).toHaveBeenCalledWith('tutor-test-complete', '');
     });
+
+    it('can import json', function() {
+        var json = '{"tutor-cancel-complete": true, "tutor-cancel": 0, "tutor-pause-complete": true, "tutor-pause": 0}';
+        expect(this.store.import(json)).not.toBeDefined();
+        expect(this.spy).toHaveBeenCalledWith('tutor-cancel-complete', true);
+        expect(this.spy).toHaveBeenCalledWith('tutor-cancel', 0);
+        expect(this.spy).toHaveBeenCalledWith('tutor-pause-complete', true);
+        expect(this.spy).toHaveBeenCalledWith('tutor-pause', 0);
+    });
+
+    it('can export json', function() {
+        var json = '{"tutor-cancel-complete":true,"tutor-cancel":0,"tutor-pause-complete":true,"tutor-pause":0}';
+        this.spy.and.returnValue({"tutor-cancel-complete": true, "tutor-cancel": 0, "tutor-pause-complete": true, "tutor-pause": 0});
+        expect(this.store.export()).toEqual(json);
+    });
 });

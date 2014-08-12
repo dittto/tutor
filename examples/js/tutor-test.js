@@ -34,9 +34,10 @@ var boxes = {
     },
 
     autoClose: {
-        maxWidth: 500,
+        maxWidth: 300,
         isCentral: true,
         autoClose: true,
+        moveToBottom: true,
         contentText: 'Close each of the other two boxes and this one will go also'
     },
 
@@ -83,15 +84,7 @@ var tutorials = {
     }
 };
 
-var tutorBox = new TutorBox(jQuery, new TutorConfigManager(), new TutorPromiseFactory(jQuery, TutorPromise));
-var tutorBackground = new TutorBackground(jQuery, new TutorConfigManager());
-var tutorCancel = new TutorCancel(jQuery, new TutorConfigManager());
-var tutorDesign = new TutorDesign(tutorBox, tutorBackground, tutorCancel);
-
-/**
- *
- */
-var tutor = new Tutor(new TutorConfigManager(), tutorDesign, new TutorPage(), new TutorPromise(jQuery), new TutorPromiseStore(), new TutorStore(jQuery.cookie));
+var tutor = new Tutor(jQuery);
 var promise = tutor.init(boxes, tutorials);
 tutor.tutorial('homepage');
 
