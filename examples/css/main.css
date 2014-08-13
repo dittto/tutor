@@ -48,7 +48,7 @@
     z-index: 100;
 }
 
-#tutor-cancel {
+#tutor-control {
     background: rgba(52, 73, 94, 1);
     box-shadow: 3px 3px 5px rgba(44, 62, 80, 0.4);
     padding: 10px 0;
@@ -60,17 +60,17 @@
     z-index: 400;
 }
 
-#tutor-cancel div {
+#tutor-control div {
     display: inline-block;
 }
 
-#tutor-cancel .btn-default {
+#tutor-control .btn-default {
     background-color: #e74c3c;
     border-color: #c0392b;
     color: #ffffff;
 }
 
-#tutor-cancel .btn-default:hover {
+#tutor-control .btn-default:hover {
     background-color: #f75c4c;
 }
 

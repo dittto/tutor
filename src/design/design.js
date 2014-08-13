@@ -2,11 +2,11 @@
  *
  * @param box
  * @param background
- * @param cancel
- * @returns {{box: Function, background: Function, cancel: Function}}
+ * @param control
+ * @returns {{box: Function, background: Function, control: Function}}
  * @constructor
  */
-var TutorDesign = function(box, background, cancel) {
+var TutorDesign = function(box, background, control) {
     // init vars
     var obj = {};
 
@@ -28,15 +28,15 @@ var TutorDesign = function(box, background, cancel) {
 
     /**
      *
-     * @returns TutorCancel
+     * @returns TutorControl
      */
-    obj.getCancel = function() {
-        return cancel;
+    obj.getControl = function() {
+        return control;
     };
 
     return {
         box: obj.getBox,
         background: obj.getBackground,
-        cancel: obj.getCancel
+        control: obj.getControl
     }
 };

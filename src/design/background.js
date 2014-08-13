@@ -1,4 +1,12 @@
-var TutorBackground = function($, configManager) {
+/**
+ *
+ * @param $
+ * @param htmlObj
+ * @param configManager
+ * @returns {{show: Function, remove: Function, getConfig: *}}
+ * @constructor
+ */
+var TutorBackground = function($, htmlObj, configManager) {
     // init vars
     var obj = {}, defaultConfig;
 
@@ -19,7 +27,7 @@ var TutorBackground = function($, configManager) {
         var $bg = $('.' + config.bgClass);
 
         if ($bg.length === 0) {
-            $('body').append('<div class="' + config.bgClass + '"></div>');
+            $('body').append(htmlObj.bg(config));
         }
     };
 

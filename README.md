@@ -16,6 +16,7 @@ An idea to help make web applications easier to learn to use. This will show you
 
  - Jasmine tests for design/*
  - Finish doc blocks
+ - JS Lint everything
 
 ## Future improvements
 
@@ -23,6 +24,5 @@ An idea to help make web applications easier to learn to use. This will show you
  - Tutorial 2 that shows the catfish and importing data from the page
  - Tutorial 3 that shows how it works with tabs
 
- - Split out the html to make it easy to update
  - Make page scroll to tutorial box if not on display already
  - Add animations object

@@ -72,11 +72,11 @@ var tutorials = {
         boxes: ['testBox', 'blueBox', ['above', 'below', 'autoClose'], 'thankYou']
     },
     pause: {
-        hideCancelBox: true,
+        hideControls: true,
         boxes: ['pause']
     },
     cancel: {
-        hideCancelBox: true,
+        hideControls: true,
         boxes: ['cancel']
     },
     reversi: {

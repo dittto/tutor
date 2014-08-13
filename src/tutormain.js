@@ -47,7 +47,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
 
     // init the default page options
     defaultPageOptions = {
-        hideCancelBox: false,
+        hideControls: false,
         boxes: []
     };
 
@@ -166,9 +166,9 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
             }
         }
 
-        // show the cancel buttons
-        if (tutorial.hideCancelBox === false) {
-            obj.showCancelButton(tutorialName);
+        // show the control buttons
+        if (tutorial.hideControls === false) {
+            obj.showControls(tutorialName);
         }
 
         return true;
@@ -185,8 +185,8 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
         // remove the box backgrounds
         obj.hideBackground();
 
-        // hide the cancel button
-        obj.hideCancelButton();
+        // hide the control buttons
+        obj.hideControls();
     };
 
     /**
@@ -246,30 +246,31 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      *
      * @param tutorialName
      */
-    obj.showCancelButton = function(tutorialName) {
+    obj.showControls = function(tutorialName) {
         // init vars
-        var cancel, promise;
+        var control, promise;
 
-        // show the cancel buttons
-        cancel = tutorDesign.cancel();
-        promise = cancel.showCancelButton(cancel.getConfig());
+        // show the control buttons
+        control = tutorDesign.control();
+        promise = control.showControls(control.getConfig());
 
-        obj.handleCancelButtons(promise, tutorialName);
+        obj.handleControls(promise, tutorialName);
     };
 
     /**
      *
      */
-    obj.hideCancelButton = function() {
-        var cancel = tutorDesign.cancel();
-        cancel.hideCancelButton(cancel.getConfig());
+    obj.hideControls = function() {
+        var control = tutorDesign.control();
+        control.hideControls(control.getConfig());
     };
 
     /**
      *
      * @param promise
+     * @param tutorialName
      */
-    obj.handleCancelButtons = function(promise, tutorialName) {
+    obj.handleControls = function(promise, tutorialName) {
         // handle the button responses
         promise.progress(function(args) {
             // hide the current page
