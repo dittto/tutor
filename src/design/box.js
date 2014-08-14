@@ -1,6 +1,7 @@
 /**
  *
  * @param $
+ * @param htmlObj
  * @param configManager
  * @param promiseFactory
  * @returns {{showBox: (*|Function), closeBox: Function, closeBoxes: Function, getConfig: *}}

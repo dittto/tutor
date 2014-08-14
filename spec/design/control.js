@@ -32,8 +32,7 @@ describe('Tutor Control object', function() {
     });
 
     afterEach(function() {
-        $('#' + this.config.id).remove();
-        this.obj.removeControlEvents();
+        this.obj.hideControls(this.config);
     });
 
     it('automatically calls default config on the config manager', function() {

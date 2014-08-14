@@ -9,7 +9,7 @@
  */
 var TutorControl = function($, htmlObj, configManager, promiseFactory) {
     // init vars
-    var obj = {}, defaultConfig, config;
+    var obj = {}, defaultConfig;
 
     /**
      *
@@ -22,12 +22,6 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
         cancelId: 'tutor-control-cancel'
     };
     configManager.setDefaultConfig(defaultConfig);
-
-    // set up events
-    config = configManager.getConfig();
-    $('body').on({'click.tutorcontrol': function() {obj.handlePause()}}, '#' + config.pauseId);
-    $('body').on({'click.tutorcontrol': function() {obj.handleReset()}}, '#' + config.resetId);
-    $('body').on({'click.tutorcontrol': function() {obj.handleCancel()}}, '#' + config.cancelId);
 
     /**
      *
@@ -43,6 +37,11 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
             // add the box to the page
             $('body').append(htmlObj.box(config));
 
+            // set up events
+            $('body').on({'click.tutorcontrol': function() {obj.handlePause()}}, '#' + config.pauseId);
+            $('body').on({'click.tutorcontrol': function() {obj.handleReset()}}, '#' + config.resetId);
+            $('body').on({'click.tutorcontrol': function() {obj.handleCancel()}}, '#' + config.cancelId);
+
             // set up the deferred
             obj.promise = new promiseFactory.init();
         }
@@ -56,6 +55,7 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
      */
     obj.hideControls = function(config) {
         $('#' + config.id).remove();
+        $('body').off('.tutorcontrol');
     };
 
     /**
@@ -79,17 +79,12 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
         obj.promise.notify('cancel', {});
     };
 
-    obj.removeControlEvents = function() {
-        $('body').off('.tutorcontrol');
-    };
-
     /**
      * Public methods
      */
     return {
         showControls: obj.showControls,
         hideControls: obj.hideControls,
-        getConfig: configManager.getConfig,
-        removeControlEvents: obj.removeControlEvents
+        getConfig: configManager.getConfig
     }
 };

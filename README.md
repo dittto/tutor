@@ -17,6 +17,7 @@ An idea to help make web applications easier to learn to use. This will show you
  - Jasmine tests for design/*
  - Finish doc blocks
  - JS Lint everything
+ - Add Travis CI if possible
 
 ## Future improvements
 
