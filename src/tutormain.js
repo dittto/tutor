@@ -29,7 +29,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * needsBg:
      */
     defaultBoxOptions = {
-        maxWidth: 250,
+        maxWidth: 300,
         parentObject: '.tutor-box-parent',
         buttonList: {},
         buttonText: 'Ok',

@@ -30,3 +30,4 @@ An idea to help make web applications easier to learn to use. This will show you
  - Stop the boxes overlapping
  - Linked tutorials across pages
  - Easy method to recall current progress and which are complete
+ - Allow multiple pause / cancel boxes
