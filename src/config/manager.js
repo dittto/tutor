@@ -4,7 +4,9 @@
  * @returns {{getConfig: *}}
  * @constructor
  */
-var TutorConfigManager = function(userConfig) {
+var TutorConfigManager = function (userConfig) {
+    "use strict";
+
     // init vars
     var obj = {};
     obj.userConfig = userConfig || {};
@@ -16,7 +18,7 @@ var TutorConfigManager = function(userConfig) {
      *
      * @param config
      */
-    obj.setUserConfig = function(config) {
+    obj.setUserConfig = function (config) {
         obj.userConfig = config;
     };
 
@@ -24,7 +26,7 @@ var TutorConfigManager = function(userConfig) {
      *
      * @returns {*}
      */
-    obj.getUserConfig = function() {
+    obj.getUserConfig = function () {
         return obj.userConfig;
     };
 
@@ -32,7 +34,7 @@ var TutorConfigManager = function(userConfig) {
      *
      * @param config
      */
-    obj.setDefaultConfig = function(config) {
+    obj.setDefaultConfig = function (config) {
         obj.defaultConfig = config;
     };
 
@@ -40,7 +42,7 @@ var TutorConfigManager = function(userConfig) {
      *
      * @returns {*}
      */
-    obj.getDefaultConfig = function() {
+    obj.getDefaultConfig = function () {
         return obj.defaultConfig;
     };
 
@@ -50,7 +52,7 @@ var TutorConfigManager = function(userConfig) {
      * @param forceOverride
      * @returns {*}
      */
-    obj.getConfig = function(overrideConfig, forceOverride) {
+    obj.getConfig = function (overrideConfig, forceOverride) {
         // if not set, recalculate the config
         if (obj.config === null || forceOverride === true) {
             obj.config = obj.merge(obj.getDefaultConfig(), obj.getUserConfig());
@@ -66,7 +68,7 @@ var TutorConfigManager = function(userConfig) {
      * @param overrideValues
      * @returns {*}
      */
-    obj.merge = function(defaultValues, overrideValues) {
+    obj.merge = function (defaultValues, overrideValues) {
         // init vars
         var config = {}, key;
 

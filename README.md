@@ -20,7 +20,6 @@ An idea to help make web applications easier to learn to use. This will show you
 
 ## Future improvements
 
- - Tutorial 1 that shows the basics
  - Tutorial 2 that shows the catfish and importing data from the page
  - Tutorial 3 that shows how it works with tabs
 
@@ -30,4 +29,5 @@ An idea to help make web applications easier to learn to use. This will show you
  - Stop the boxes overlapping
  - Linked tutorials across pages
  - Easy method to recall current progress and which are complete
- - Allow multiple pause / cancel boxes
+ - Allow multiple pause / cancel boxes in the configs so each tutorial can have personalised pause / cancel boxes
+ - Force tutorials to cancel from an external trigger

@@ -3,7 +3,9 @@
  *
  * @constructor
  */
-var TutorPage = function() {
+var TutorPage = function () {
+    "use strict";
+
     // init vars
     var obj = {}, pageNum = 0;
 
@@ -12,8 +14,8 @@ var TutorPage = function() {
      *
      * @param page The value to set the page number to
      */
-    obj.setPage = function(page) {
-        pageNum = parseInt(page);
+    obj.setPage = function (page) {
+        pageNum = parseInt(page, 10);
     };
 
     /**
@@ -21,7 +23,7 @@ var TutorPage = function() {
      *
      * @returns {number}
      */
-    obj.getPage = function() {
+    obj.getPage = function () {
         return pageNum;
     };
 
@@ -31,7 +33,7 @@ var TutorPage = function() {
      * @param maxPages
      * @returns {boolean}
      */
-    obj.incrementPage = function(maxPages) {
+    obj.incrementPage = function (maxPages) {
         // get the current page value
         var current = obj.getPage();
 
@@ -39,9 +41,8 @@ var TutorPage = function() {
         if (current + 1 < maxPages) {
             obj.setPage(current + 1);
             return true;
-        } else {
-            return false;
         }
+        return false;
     };
 
     /**
@@ -51,5 +52,5 @@ var TutorPage = function() {
         setPage: obj.setPage,
         getPage: obj.getPage,
         incrementPage: obj.incrementPage
-    }
+    };
 };

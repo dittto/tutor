@@ -1,3 +1,5 @@
+/*global window */
+
 /**
  *
  * @param configManager
@@ -9,7 +11,9 @@
  * @returns {{init: Function, tutorial: Function}}
  * @constructor
  */
-var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tutorPromiseStore, store) {
+var TutorMain = function (configManager, tutorDesign, tutorPage, tutorPromise, tutorPromiseStore, store) {
+    "use strict";
+
     // init vars
     var obj = {}, boxData = [], tutorialData = [], defaultBoxOptions = {}, defaultPageOptions = {};
 
@@ -56,7 +60,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * @param boxes
      * @param tutorials
      */
-    obj.init = function(boxes, tutorials) {
+    obj.init = function (boxes, tutorials) {
         // init vars
         var boxKey, pageKey;
         boxData = boxes;
@@ -90,7 +94,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * @param tutorialName
      * @param forceIfComplete
      */
-    obj.tutorial = function(tutorialName, forceIfComplete) {
+    obj.tutorial = function (tutorialName, forceIfComplete) {
         // remove any current page options
         obj.hidePage();
 
@@ -108,7 +112,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      *
      * @param tutorialName
      */
-    obj.nextPage = function(tutorialName) {
+    obj.nextPage = function (tutorialName) {
         // remove any current page boxes
         obj.hidePage();
 
@@ -131,7 +135,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * @param id
      * @returns bool True if the page is shown correctly
      */
-    obj.showPage = function(tutorialName, id) {
+    obj.showPage = function (tutorialName, id) {
         // init vars
         var boxes, page, tutorial;
 
@@ -143,9 +147,8 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
         if (!tutorial) {
             tutorPromise.resolve('tutorialNotFound', {tutorial: tutorialName});
             return false;
-        } else {
-            tutorPromise.notify('showPage', {tutorial: tutorialName, pageNum: id});
         }
+        tutorPromise.notify('showPage', {tutorial: tutorialName, pageNum: id});
 
         // get the boxes to show and make sure the list of boxes is an array
         boxes = tutorial.boxes[id];
@@ -177,7 +180,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
     /**
      *
      */
-    obj.hidePage = function() {
+    obj.hidePage = function () {
         // remove all boxes that still exist
         var box = tutorDesign.box();
         box.closeBoxes(box.getConfig());
@@ -196,17 +199,17 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * @param boxName
      * @param boxes
      */
-    obj.showBox = function(tutorialName, boxName, boxes) {
+    obj.showBox = function (tutorialName, boxName, boxes) {
         // init the promise
-        var box = boxes[boxName], promise;
-        var boxObject = tutorDesign.box();
+        var box = boxes[boxName], promise, boxObject;
+        boxObject = tutorDesign.box();
         promise = boxObject.showBox(boxObject.getConfig(), boxName, box);
 
         // store the promise locally
         tutorPromiseStore.add(boxName, promise);
 
         // when the promise is complete, check if we can trigger the next page
-        promise.done(function() {
+        promise.done(function () {
             // remove the promise
             tutorPromiseStore.remove(boxName);
 
@@ -218,7 +221,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
                 // trigger the next page. This needs a fraction of a second
                 // timeout or jquery gets the ordering wrong and can delete the
                 // new boxes
-                window.setTimeout(function() {
+                window.setTimeout(function () {
                     obj.nextPage(tutorialName);
                 }, 1);
 
@@ -229,7 +232,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
     /**
      *
      */
-    obj.showBackground = function() {
+    obj.showBackground = function () {
         var bg = tutorDesign.background();
         bg.show(bg.getConfig());
     };
@@ -237,7 +240,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
     /**
      *
      */
-    obj.hideBackground = function() {
+    obj.hideBackground = function () {
         var bg = tutorDesign.background();
         bg.remove(bg.getConfig());
     };
@@ -246,7 +249,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      *
      * @param tutorialName
      */
-    obj.showControls = function(tutorialName) {
+    obj.showControls = function (tutorialName) {
         // init vars
         var control, promise;
 
@@ -260,7 +263,7 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
     /**
      *
      */
-    obj.hideControls = function() {
+    obj.hideControls = function () {
         var control = tutorDesign.control();
         control.hideControls(control.getConfig());
     };
@@ -270,9 +273,9 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
      * @param promise
      * @param tutorialName
      */
-    obj.handleControls = function(promise, tutorialName) {
+    obj.handleControls = function (promise, tutorialName) {
         // handle the button responses
-        promise.progress(function(args) {
+        promise.progress(function (args) {
             // hide the current page
             obj.hidePage();
 
@@ -284,15 +287,13 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
 
                 // trigger the pause tutorial
                 obj.tutorial('pause');
-            }
-            else if (args.type === 'reset') {
+            } else if (args.type === 'reset') {
                 // save the reset page number
                 store.setPage(tutorialName, 0);
 
                 // trigger the tutorial again
                 obj.tutorial(tutorialName);
-            }
-            else if (args.type === 'cancel') {
+            } else if (args.type === 'cancel') {
                 // save the tutorial as complete
                 store.setPage(tutorialName, 0);
                 store.complete(tutorialName);
@@ -309,5 +310,5 @@ var TutorMain = function(configManager, tutorDesign, tutorPage, tutorPromise, tu
     return {
         init: obj.init,
         tutorial: obj.tutorial
-    }
+    };
 };

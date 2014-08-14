@@ -7,7 +7,9 @@
  * @returns {{showControls: (*|Function), hideControls: Function, getConfig: *}}
  * @constructor
  */
-var TutorControl = function($, htmlObj, configManager, promiseFactory) {
+var TutorControl = function ($, htmlObj, configManager, promiseFactory) {
+    "use strict";
+
     // init vars
     var obj = {}, defaultConfig;
 
@@ -28,7 +30,7 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
      * @param config
      * @returns {Deferred}
      */
-    obj.showControls = function(config) {
+    obj.showControls = function (config) {
         // try and find the control box
         var $control = $('#' + config.id);
 
@@ -38,9 +40,21 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
             $('body').append(htmlObj.box(config));
 
             // set up events
-            $('body').on({'click.tutorcontrol': function() {obj.handlePause()}}, '#' + config.pauseId);
-            $('body').on({'click.tutorcontrol': function() {obj.handleReset()}}, '#' + config.resetId);
-            $('body').on({'click.tutorcontrol': function() {obj.handleCancel()}}, '#' + config.cancelId);
+            $('body').on({
+                'click.tutorcontrol': function () {
+                    obj.handlePause();
+                }
+            }, '#' + config.pauseId);
+            $('body').on({
+                'click.tutorcontrol': function () {
+                    obj.handleReset();
+                }
+            }, '#' + config.resetId);
+            $('body').on({
+                'click.tutorcontrol': function () {
+                    obj.handleCancel();
+                }
+            }, '#' + config.cancelId);
 
             // set up the deferred
             obj.promise = new promiseFactory.init();
@@ -53,7 +67,7 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
      *
      * @param config
      */
-    obj.hideControls = function(config) {
+    obj.hideControls = function (config) {
         $('#' + config.id).remove();
         $('body').off('.tutorcontrol');
     };
@@ -61,21 +75,21 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
     /**
      *
      */
-    obj.handlePause = function() {
+    obj.handlePause = function () {
         obj.promise.notify('pause', {});
     };
 
     /**
      *
      */
-    obj.handleReset = function() {
+    obj.handleReset = function () {
         obj.promise.notify('reset', {});
     };
 
     /**
      *
      */
-    obj.handleCancel = function() {
+    obj.handleCancel = function () {
         obj.promise.notify('cancel', {});
     };
 
@@ -86,5 +100,5 @@ var TutorControl = function($, htmlObj, configManager, promiseFactory) {
         showControls: obj.showControls,
         hideControls: obj.hideControls,
         getConfig: configManager.getConfig
-    }
+    };
 };

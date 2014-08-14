@@ -3,7 +3,9 @@
  * @returns {{bg: *}}
  * @constructor
  */
-var TutorHtmlBackground = function() {
+var TutorHtmlBackground = function () {
+    "use strict";
+
     // init vars
     var obj = {};
 
@@ -12,7 +14,7 @@ var TutorHtmlBackground = function() {
      * @param config
      * @returns {string}
      */
-    obj.getBg = function(config) {
+    obj.getBg = function (config) {
         return '<div class="' + config.bgClass + '"></div>';
     };
 

@@ -1,7 +1,9 @@
 /**
  *
  */
-var TutorStore = function(store) {
+var TutorStore = function (store) {
+    "use strict";
+
     // init vars
     var obj = {}, prefix = 'tutor-';
 
@@ -10,7 +12,7 @@ var TutorStore = function(store) {
      * @param tutorial
      * @param page
      */
-    obj.setPage = function(tutorial, page) {
+    obj.setPage = function (tutorial, page) {
         store(prefix + tutorial, page);
     };
 
@@ -19,16 +21,16 @@ var TutorStore = function(store) {
      * @param tutorial
      * @returns {*}
      */
-    obj.getPage = function(tutorial) {
+    obj.getPage = function (tutorial) {
         var val = store(prefix + tutorial);
-        return typeof val !== 'undefined' ? parseInt(val) : 0;
+        return val !== undefined ? parseInt(val, 10) : 0;
     };
 
     /**
      *
      * @param tutorial
      */
-    obj.complete = function(tutorial) {
+    obj.complete = function (tutorial) {
         store(prefix + tutorial + '-complete', true);
     };
 
@@ -36,7 +38,7 @@ var TutorStore = function(store) {
      *
      * @returns {boolean}
      */
-    obj.isComplete = function(tutorial) {
+    obj.isComplete = function (tutorial) {
         return !!store(prefix + tutorial + '-complete');
     };
 
@@ -44,7 +46,7 @@ var TutorStore = function(store) {
      *
      * @param tutorial
      */
-    obj.reset = function(tutorial) {
+    obj.reset = function (tutorial) {
         store(prefix + tutorial + '-complete', '');
     };
 
@@ -52,7 +54,7 @@ var TutorStore = function(store) {
      *
      * @param json
      */
-    obj.import = function(json) {
+    obj.import = function (json) {
         // init vars
         var key, data;
         data = JSON.parse(json);
@@ -69,7 +71,7 @@ var TutorStore = function(store) {
      *
      * @returns {*}
      */
-    obj.export = function() {
+    obj.export = function () {
         // init vars
         var key, data, regex, results = {};
         data = store();

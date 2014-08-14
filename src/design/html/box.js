@@ -1,9 +1,12 @@
 /**
  *
+ * @param $
  * @returns {{box: *}}
  * @constructor
  */
-var TutorHtmlBox = function() {
+var TutorHtmlBox = function ($) {
+    "use strict";
+
     // init vars
     var obj = {};
 
@@ -17,7 +20,7 @@ var TutorHtmlBox = function() {
      * @param getOkButtonTriggerFunc
      * @returns {string}
      */
-    obj.getBox = function(config, box, boxName, boxId, getButtonIdFunc, getOkButtonTriggerFunc) {
+    obj.getBox = function (config, box, boxName, boxId, getButtonIdFunc, getOkButtonTriggerFunc) {
         // init vars
         obj.getButtonIdFunc = getButtonIdFunc;
         obj.getOkButtonTriggerFunc = getOkButtonTriggerFunc;
@@ -37,7 +40,7 @@ var TutorHtmlBox = function() {
      * @param text The text to put in the title
      * @returns {string}
      */
-    obj.getTitle = function(text) {
+    obj.getTitle = function (text) {
         var title = '';
         if (text) {
             title = '<div class="panel-heading"><h3 class="panel-title">' + text + '</h3></div>';
@@ -53,7 +56,7 @@ var TutorHtmlBox = function() {
      * @param text If there's no selector specified then use this text
      * @returns {string}
      */
-    obj.getContent = function(selector, text) {
+    obj.getContent = function (selector, text) {
         // check the selector
         var content = '';
         if (selector !== '') {
@@ -76,18 +79,15 @@ var TutorHtmlBox = function() {
      * @param okText The text for the ok button
      * @returns {string}
      */
-    obj.getButtons = function(boxName, buttons, hasOk, okText) {
+    obj.getButtons = function (boxName, buttons, hasOk, okText) {
         // init vars
         var content = '', buttonEvent;
 
         // loop through and create the buttons
         for (buttonEvent in buttons) {
-            if (!buttons.hasOwnProperty(buttonEvent)) {
-                continue;
+            if (buttons.hasOwnProperty(buttonEvent)) {
+                content += '<button id="' + obj.getButtonIdFunc(boxName, buttonEvent) + '" class="btn btn-default">' + buttons[buttonEvent] + '</button>';
             }
-
-            // create the button
-            content += '<button id="' + obj.getButtonIdFunc(boxName, buttonEvent) + '" class="btn btn-default">' + buttons[buttonEvent] + '</button>';
         }
 
         // if an ok button is required, then add

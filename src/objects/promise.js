@@ -4,7 +4,9 @@
  * @returns {{init: Function, notify: Function, resolve: Function, getPromise: Function}}
  * @constructor
  */
-var TutorPromise = function($) {
+var TutorPromise = function ($) {
+    "use strict";
+
     // init vars
     var obj = {};
     obj.promise = null;
@@ -12,7 +14,7 @@ var TutorPromise = function($) {
     /**
      *
      */
-    obj.init = function() {
+    obj.init = function () {
         obj.promise = $.Deferred();
     };
 
@@ -21,8 +23,8 @@ var TutorPromise = function($) {
      * @param type
      * @param args
      */
-    obj.notify = function(type, args) {
-        args['type'] = type;
+    obj.notify = function (type, args) {
+        args.type = type;
         obj.promise.notify(args);
     };
 
@@ -31,8 +33,8 @@ var TutorPromise = function($) {
      * @param type
      * @param args
      */
-    obj.resolve = function(type, args) {
-        args['type'] = type;
+    obj.resolve = function (type, args) {
+        args.type = type;
         obj.promise.resolve(args);
     };
 
@@ -40,7 +42,7 @@ var TutorPromise = function($) {
      *
      * @returns {*}
      */
-    obj.getPromise = function() {
+    obj.getPromise = function () {
         return obj.promise;
     };
 

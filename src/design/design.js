@@ -6,7 +6,9 @@
  * @returns {{box: Function, background: Function, control: Function}}
  * @constructor
  */
-var TutorDesign = function(box, background, control) {
+var TutorDesign = function (box, background, control) {
+    "use strict";
+
     // init vars
     var obj = {};
 
@@ -14,7 +16,7 @@ var TutorDesign = function(box, background, control) {
      *
      * @returns TutorBox
      */
-    obj.getBox = function() {
+    obj.getBox = function () {
         return box;
     };
 
@@ -22,7 +24,7 @@ var TutorDesign = function(box, background, control) {
      *
      * @returns TutorBackground
      */
-    obj.getBackground = function() {
+    obj.getBackground = function () {
         return background;
     };
 
@@ -30,7 +32,7 @@ var TutorDesign = function(box, background, control) {
      *
      * @returns TutorControl
      */
-    obj.getControl = function() {
+    obj.getControl = function () {
         return control;
     };
 
@@ -38,5 +40,5 @@ var TutorDesign = function(box, background, control) {
         box: obj.getBox,
         background: obj.getBackground,
         control: obj.getControl
-    }
+    };
 };

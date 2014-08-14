@@ -7,7 +7,9 @@
  * @returns {{showBox: (*|Function), closeBox: Function, closeBoxes: Function, getConfig: *}}
  * @constructor
  */
-var TutorBox = function($, htmlObj, configManager, promiseFactory) {
+var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
+    "use strict";
+
     // init vars
     var obj = {}, defaultConfig;
 
@@ -28,7 +30,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param box The options for the box
      * @returns {promiseFactory.init}
      */
-    obj.showBox = function(config, boxName, box) {
+    obj.showBox = function (config, boxName, box) {
         // init vars
         var tutorPromise, boxId;
 
@@ -58,7 +60,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param boxName
      * @param boxId
      */
-    obj.createBox = function(config, box, boxName, boxId) {
+    obj.createBox = function (config, box, boxName, boxId) {
         $('body').append(htmlObj.box(config, box, boxName, boxId, obj.getButtonId, obj.getOkButtonTrigger));
     };
 
@@ -68,7 +70,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param boxName The name of the box to generate an id for
      * @returns {string}
      */
-    obj.getBoxId = function(boxName) {
+    obj.getBoxId = function (boxName) {
         return 'tutor-box-' + boxName;
     };
 
@@ -79,7 +81,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param buttonEvent The event the button triggers
      * @returns {string}
      */
-    obj.getButtonId = function(boxName, buttonEvent) {
+    obj.getButtonId = function (boxName, buttonEvent) {
         return 'tutor-box-' + boxName + '-button-' + buttonEvent;
     };
 
@@ -89,7 +91,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param boxName The name of the box the ok button belongs to
      * @returns {string}
      */
-    obj.getOkButtonTrigger = function(boxName) {
+    obj.getOkButtonTrigger = function (boxName) {
         return boxName + '-ok';
     };
 
@@ -103,18 +105,15 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * button that closes the window
      * @param triggerOn This is the parent to trigger
      */
-    obj.initButtonEvents = function(boxName, buttons, hasOk, triggerOn) {
+    obj.initButtonEvents = function (boxName, buttons, hasOk, triggerOn) {
         // init vars
         var buttonEvent, okTrigger;
 
         // create the events
         for (buttonEvent in buttons) {
-            if (!buttons.hasOwnProperty(buttonEvent)) {
-                continue;
+            if (buttons.hasOwnProperty(buttonEvent)) {
+                obj.initButtonEvent(obj.getButtonId(boxName, buttonEvent), buttonEvent, triggerOn);
             }
-
-            // set up the events for the buttons
-            obj.initButtonEvent(obj.getButtonId(boxName, buttonEvent), buttonEvent, triggerOn);
         }
 
         // if an ok is required then add the event
@@ -131,12 +130,12 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param buttonEvent The event to trigger on the triggerOn selector
      * @param triggerOn The selector to trigger all events on
      */
-    obj.initButtonEvent = function(buttonId, buttonEvent, triggerOn) {
+    obj.initButtonEvent = function (buttonId, buttonEvent, triggerOn) {
         // remove old events for the button
         $('body').off('click', '#' + buttonId);
 
         // setup the new event
-        $('body').on({click: function() {
+        $('body').on({click: function () {
             $(triggerOn).trigger(buttonEvent);
         }}, '#' + buttonId);
     };
@@ -148,27 +147,30 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param boxConfig The config for the box
      * @returns null
      */
-    obj.calcBoxPosition = function(boxId, boxConfig) {
+    obj.calcBoxPosition = function (boxId, boxConfig) {
         // init vars
         var offset, $box, $parent, h, w, align;
 
         // calculate the position if the box is meant to be centrally aligned
         $box = $('#' + boxId);
+        if (!!boxConfig.maxWidth) {
+            $box.css('max-width', boxConfig.maxWidth);
+        }
         if (!!boxConfig.isCentral) {
-            return obj.calcBoxPositionCentral($box, boxConfig.maxWidth, !!boxConfig.moveToBottom);
+            return obj.calcBoxPositionCentral($box, !!boxConfig.moveToBottom);
         }
 
         // otherwise calculate the position based on the parent
         $parent = $(boxConfig.parentObject);
         offset = $parent.offset();
-        if (typeof offset === 'undefined') {
+        if (offset === undefined) {
             return null;
         }
 
         // get the current box dimensions
         align = boxConfig.align;
-        h = align === 'top' ? -1 * $box.height() : (align === 'bottom' ? $parent.height() : 0);
-        w = align === 'left' ? -1 * $box.width() : (align === 'right' ? $parent.width() : 0);
+        h = align === 'top' ? -1 * $box.outerHeight() : (align === 'bottom' ? $parent.outerHeight() : 0);
+        w = align === 'left' ? -1 * $box.outerWidth() : (align === 'right' ? $parent.outerWidth() : 0);
 
         // move the box to it's offset
         $box.css('top', offset.top + h);
@@ -181,22 +183,16 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * Moves the box into the center of the screen
      *
      * @param $box The jQuery object of the box
-     * @param maxWidth The max width of the box
      * @param moveToBottom A flag to move the box to the bottom of the page
      */
-    obj.calcBoxPositionCentral = function($box, maxWidth, moveToBottom) {
-        // add a max-width if required
-        if (!!maxWidth) {
-            $box.css('max-width', maxWidth);
-        }
-
+    obj.calcBoxPositionCentral = function ($box, moveToBottom) {
         // set to center of window
         $box.css('margin-left', -1 * ($box.width() / 2));
         $box.css('margin-top', -1 * ($box.height() / 2));
 
         // add the centralised class
         $box.addClass('tutor-box-central' + (moveToBottom ? ' tutor-box-bottom' : ''));
-    }
+    };
 
     /**
      * Sets up the event capture for the box
@@ -206,7 +202,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param trigger The possible trigger that will close this box
      * @param triggerOn The element to store these triggers against
      */
-    obj.initEventEndpoints = function(tutorPromise, boxName, trigger, triggerOn) {
+    obj.initEventEndpoints = function (tutorPromise, boxName, trigger, triggerOn) {
         // init vars
         var okTrigger, events = {};
 
@@ -215,18 +211,18 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
 
         // define the events for the ok trigger and the defined trigger
         okTrigger = obj.getOkButtonTrigger(boxName);
-        events[okTrigger + '.tutor-' + boxName] = function(e) {
+        events[okTrigger + '.tutor-' + boxName] = function () {
             obj.triggerBoxComplete(tutorPromise, boxName);
         };
         if (!!trigger) {
-            events[trigger + '.tutor-' + boxName] = function(e) {
+            events[trigger + '.tutor-' + boxName] = function () {
                 obj.triggerBoxComplete(tutorPromise, boxName);
             };
         }
 
         // capture the events
         $(triggerOn).on(events);
-    }
+    };
 
     /**
      * Triggers the box to close and updated the deferred object
@@ -234,7 +230,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      * @param tutorPromise A wrapper for a promise
      * @param boxName The name of the box in this tutorial
      */
-    obj.triggerBoxComplete = function(tutorPromise, boxName) {
+    obj.triggerBoxComplete = function (tutorPromise, boxName) {
         // flag box as complete
         tutorPromise.resolve('boxOk', {name: boxName});
 
@@ -247,7 +243,7 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      *
      * @param $box The jquery object of the close to close
      */
-    obj.closeBox = function($box) {
+    obj.closeBox = function ($box) {
         $box.remove();
     };
 
@@ -256,8 +252,8 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
      *
      * @param config The config containing the class
      */
-    obj.closeBoxes = function(config) {
-        $('.' + config.boxClass).each(function() {
+    obj.closeBoxes = function (config) {
+        $('.' + config.boxClass).each(function () {
             obj.closeBox($(this));
         });
     };
@@ -270,5 +266,5 @@ var TutorBox = function($, htmlObj, configManager, promiseFactory) {
         closeBox: obj.closeBox,
         closeBoxes: obj.closeBoxes,
         getConfig: configManager.getConfig
-    }
+    };
 };

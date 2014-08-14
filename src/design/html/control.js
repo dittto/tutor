@@ -5,7 +5,9 @@
  * @returns {{box: (Function|*)}}
  * @constructor
  */
-var TutorHtmlControl = function() {
+var TutorHtmlControl = function () {
+    "use strict";
+
     // init vars
     var obj = {};
 
@@ -16,7 +18,7 @@ var TutorHtmlControl = function() {
      * to allow developers to pass though any additional values they require
      * @returns {string}
      */
-    obj.getBox = function(config) {
+    obj.getBox = function (config) {
         return '<div id="' + config.id + '"><div class="btn-group">' +
             '<button id="' + config.pauseId + '" class="btn btn-default">Pause <span class="glyphicon glyphicon-pause"></span></button>' +
             '<button id="' + config.resetId + '" class="btn btn-default">Reset <span class="glyphicon glyphicon-repeat"></span></button>' +

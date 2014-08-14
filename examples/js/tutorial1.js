@@ -28,7 +28,7 @@ var boxes = {
 
     introBox4: {
         maxWidth: 300,
-        contentText: 'Or have no buttons and get users to complete an action like clicking on the image above. It helps to have no background here',
+        contentText: 'Or have no buttons and get users to complete an action. It helps to have no background here.<br/><br/>Click the image above to continue.',
         parentObject: '.image-box',
         trigger: 'image-box-trigger',
         align: 'bottom'
@@ -42,19 +42,19 @@ var boxes = {
 
     introBox5b: {
         contentTitle: 'Have optional headers...',
-        content: 'And display multiple boxes at the same time. The tutorial won\'t continue until both are complete',
+        contentText: 'And display multiple boxes at the same time. The tutorial won\'t continue until both are complete',
         parentObject: '.yellow-box',
         align: 'bottom'
     },
 
     introBox6: {
-        contentText: 'You can multiple tutorials on a page, but only one can be followed at a given time. You can also pause, reset, and cancel tutorials. Click on the pause button above. If you\'ve done that already then click ok',
+        contentText: 'You can multiple tutorials on a page, but only one can be followed at a given time. You can also pause, reset, and cancel tutorials. Click on the pause button above.<br/><br/>If you\'ve done that already then click Ok.',
         isCentral: true,
         needsBg: true
     },
 
     introBox7: {
-        contentText: 'This is the end of this tutorial. Click on "Advanced features tutorial" in the right column',
+        contentText: 'This is the end of this tutorial. Click on "Advanced features tutorial" in the right column.<br/><br/>You can restart this by clicking on "Welcome tutorial" in the right column.',
         buttonList: {nextButton: 'Start next tutorial'},
         isCentral: true,
         needsBg: true
@@ -99,7 +99,7 @@ $('.startTutorialA').click(function() {
     tutor.tutorial('tutorialA', true);
 });
 
-$('.startTutorialB').click(function() {
+$('.startTutorialB, #tutor-box-introBox7-button-nextButton').click(function() {
     tutor.tutorial('tutorialB', true);
 });
 

@@ -6,7 +6,9 @@
  * @returns {{show: Function, remove: Function, getConfig: *}}
  * @constructor
  */
-var TutorBackground = function($, htmlObj, configManager) {
+var TutorBackground = function ($, htmlObj, configManager) {
+    "use strict";
+
     // init vars
     var obj = {}, defaultConfig;
 
@@ -23,7 +25,7 @@ var TutorBackground = function($, htmlObj, configManager) {
      *
      * @param config
      */
-    obj.show = function(config) {
+    obj.show = function (config) {
         var $bg = $('.' + config.bgClass);
 
         if ($bg.length === 0) {
@@ -35,7 +37,7 @@ var TutorBackground = function($, htmlObj, configManager) {
      *
      * @param config
      */
-    obj.remove = function(config) {
+    obj.remove = function (config) {
         $('.' + config.bgClass).remove();
     };
 
@@ -46,5 +48,5 @@ var TutorBackground = function($, htmlObj, configManager) {
         show: obj.show,
         remove: obj.remove,
         getConfig: configManager.getConfig
-    }
+    };
 };

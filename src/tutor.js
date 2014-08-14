@@ -1,35 +1,45 @@
+/*global TutorBox, TutorHtmlBox, TutorConfigManager, TutorPromiseFactory, TutorPromise, TutorBackground, TutorHtmlBackground, TutorControl, TutorHtmlControl, TutorDesign, TutorMain, TutorPage, TutorPromiseStore, TutorStore */
+
 /**
  *
  * @param jQuery
  * @returns {*}
  * @constructor
  */
-var Tutor = function(jQuery) {
+var Tutor = function (jQuery) {
+    "use strict";
+    // init vars
+    var tutorBox, tutorBackground, tutorControl, tutorDesign;
+
     // init the box generator
-    var tutorBox = new TutorBox(
+    tutorBox = new TutorBox(
         jQuery,
-        new TutorHtmlBox(),
+        new TutorHtmlBox(jQuery),
         new TutorConfigManager(),
-        new TutorPromiseFactory(jQuery, TutorPromise));
+        new TutorPromiseFactory(jQuery, TutorPromise)
+    );
 
     // init the background generator
-    var tutorBackground = new TutorBackground(
+    tutorBackground = new TutorBackground(
         jQuery,
         new TutorHtmlBackground(),
-        new TutorConfigManager());
+        new TutorConfigManager()
+    );
 
     // init the Tutor controls generators
-    var tutorControl = new TutorControl(
+    tutorControl = new TutorControl(
         jQuery,
         new TutorHtmlControl(),
         new TutorConfigManager(),
-        new TutorPromiseFactory(jQuery, TutorPromise));
+        new TutorPromiseFactory(jQuery, TutorPromise)
+    );
 
     // init the service locator for the 3 generators
-    var tutorDesign = new TutorDesign(
+    tutorDesign = new TutorDesign(
         tutorBox,
         tutorBackground,
-        tutorControl);
+        tutorControl
+    );
 
     // init and return tutor
     return new TutorMain(
@@ -38,5 +48,6 @@ var Tutor = function(jQuery) {
         new TutorPage(),
         new TutorPromise(jQuery),
         new TutorPromiseStore(),
-        new TutorStore(jQuery.cookie));
+        new TutorStore(jQuery.cookie)
+    );
 };

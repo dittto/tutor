@@ -3,7 +3,9 @@
  *
  * @constructor
  */
-var TutorPromiseStore = function() {
+var TutorPromiseStore = function () {
+    "use strict";
+
     // init vars
     var obj = {}, currentPromises = {};
 
@@ -13,7 +15,7 @@ var TutorPromiseStore = function() {
      * @param name The name of the promise to store
      * @param promise The promise to store
      */
-    obj.add = function(name, promise) {
+    obj.add = function (name, promise) {
         currentPromises[name] = promise;
     };
 
@@ -22,14 +24,14 @@ var TutorPromiseStore = function() {
      *
      * @param name The name of the promise to remove
      */
-    obj.remove = function(name) {
+    obj.remove = function (name) {
         delete currentPromises[name];
     };
 
     /**
      * Resets the promise store
      */
-    obj.reset = function() {
+    obj.reset = function () {
         currentPromises = {};
     };
 
@@ -38,14 +40,14 @@ var TutorPromiseStore = function() {
      *
      * @returns {number}
      */
-    obj.count = function() {
+    obj.count = function () {
         // init vars
         var key, size = 0;
 
         // count properties
         for (key in currentPromises) {
             if (currentPromises.hasOwnProperty(key)) {
-                size ++;
+                size += 1;
             }
         }
 
@@ -60,7 +62,7 @@ var TutorPromiseStore = function() {
      * can ignore autoClose boxes
      * @returns {boolean}
      */
-    obj.isEmpty = function(boxes) {
+    obj.isEmpty = function (boxes) {
         // init vars
         var boxName, count = 0;
         boxes = boxes || {};
@@ -68,14 +70,13 @@ var TutorPromiseStore = function() {
         // ignore boxes that have the auto-close flag
         for (boxName in currentPromises) {
             // ignore any inherited properties
-            if (!currentPromises.hasOwnProperty(boxName)) {
-                continue;
+            if (currentPromises.hasOwnProperty(boxName)) {
+                // if not an autoClose box, then count
+                if (boxes[boxName] === undefined || boxes[boxName].autoClose === false) {
+                    count += 1;
+                }
             }
 
-            // if not an autoClose box, then count
-            if (typeof boxes[boxName] === 'undefined' || boxes[boxName].autoClose === false) {
-                count ++;
-            }
         }
 
         return count === 0;
@@ -90,5 +91,5 @@ var TutorPromiseStore = function() {
         reset: obj.reset,
         count: obj.count,
         isEmpty: obj.isEmpty
-    }
+    };
 };

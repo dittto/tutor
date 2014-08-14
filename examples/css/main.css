@@ -90,7 +90,11 @@
     background-color: #f75c4c;
 }
 
-.blue-box {
+.image-box {
+    min-height: 400px;
+}
+
+.yellow-box {
     color: #ffffff;
     background: rgba(241, 196, 15, 1.0);
     height: 100px;

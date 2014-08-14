@@ -1,11 +1,13 @@
 /**
  *
  * @param jQuery
- * @param func
+ * @param Func
  * @returns {{init: Function}}
  * @constructor
  */
-var TutorPromiseFactory = function(jQuery, func) {
+var TutorPromiseFactory = function (jQuery, Func) {
+    "use strict";
+
     // init vars
     var obj = {};
 
@@ -13,8 +15,8 @@ var TutorPromiseFactory = function(jQuery, func) {
      *
      * @returns {func}
      */
-    obj.init = function() {
-        var promise = new func(jQuery);
+    obj.init = function () {
+        var promise = new Func(jQuery);
         promise.init();
         return promise;
     };
