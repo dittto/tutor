@@ -14,7 +14,6 @@ An idea to help make web applications easier to learn to use. This will show you
 
 ## Next steps
 
- - Jasmine tests for design/*
  - Finish doc blocks
  - JS Lint everything
  - Add Travis CI if possible
@@ -27,3 +26,7 @@ An idea to help make web applications easier to learn to use. This will show you
 
  - Make page scroll to tutorial box if not on display already
  - Add animations object
+ - Reposition the boxes on browser resize
+ - Stop the boxes overlapping
+ - Linked tutorials across pages
+ - Easy method to recall current progress and which are complete
