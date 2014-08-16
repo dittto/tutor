@@ -1,22 +1,24 @@
 /**
+ * A simple factory class that instantiated promise wrapper objects
  *
- * @param jQuery
- * @param Func
+ * @param $ The jQuery object
+ * @param Func The promise wrapper function that gets instantiated
  * @returns {{init: Function}}
  * @constructor
  */
-var TutorPromiseFactory = function (jQuery, Func) {
+var TutorPromiseFactory = function ($, Func) {
     "use strict";
 
     // init vars
     var obj = {};
 
     /**
+     * Creates a new promise wrapper and runs it's init method
      *
-     * @returns {func}
+     * @returns {Func}
      */
     obj.init = function () {
-        var promise = new Func(jQuery);
+        var promise = new Func($);
         promise.init();
         return promise;
     };

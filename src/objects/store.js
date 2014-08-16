@@ -1,5 +1,10 @@
 /**
+ * A store for the state of tutorials. This takes a store object and stores
+ * important info like page number and if the tutorial is complete
  *
+ * @param store The store object, such as jQuery.cookie()
+ * @returns {{setPage: Function, getPage: *, complete: Function, isComplete: *, reset: Function, import: Function, export: *}}
+ * @constructor
  */
 var TutorStore = function (store) {
     "use strict";
@@ -8,18 +13,20 @@ var TutorStore = function (store) {
     var obj = {}, prefix = 'tutor-';
 
     /**
+     * Stores the page number of a given tutorial
      *
-     * @param tutorial
-     * @param page
+     * @param tutorial The name of the tutorial to store
+     * @param page The number of the page to store
      */
     obj.setPage = function (tutorial, page) {
         store(prefix + tutorial, page);
     };
 
     /**
+     * Gets the page number of a given tutorial
      *
-     * @param tutorial
-     * @returns {*}
+     * @param tutorial The name of the tutorial to store
+     * @returns {int}
      */
     obj.getPage = function (tutorial) {
         var val = store(prefix + tutorial);
@@ -27,15 +34,18 @@ var TutorStore = function (store) {
     };
 
     /**
+     * Sets the tutorial as complete
      *
-     * @param tutorial
+     * @param tutorial The name of the tutorial to set as complete
      */
     obj.complete = function (tutorial) {
         store(prefix + tutorial + '-complete', true);
     };
 
     /**
+     * Returns if the given tutorial has been completed
      *
+     * @param tutorial The name of the tutorial to find out if completed
      * @returns {boolean}
      */
     obj.isComplete = function (tutorial) {
@@ -43,16 +53,20 @@ var TutorStore = function (store) {
     };
 
     /**
+     * Sets the tutorial to be un-complete
      *
-     * @param tutorial
+     * @param tutorial The name of the tutorial to reset
      */
     obj.reset = function (tutorial) {
         store(prefix + tutorial + '-complete', '');
     };
 
     /**
+     * Takes a json string to import settings of which tutorials are complete.
+     * This is so settings can be pushed into a database and saved for a given
+     * user
      *
-     * @param json
+     * @param json The json string to import
      */
     obj.import = function (json) {
         // init vars
@@ -68,8 +82,10 @@ var TutorStore = function (store) {
     };
 
     /**
+     * Exports a string of all tutorial settings so they can be saved against
+     * the user's account
      *
-     * @returns {*}
+     * @returns {string}
      */
     obj.export = function () {
         // init vars

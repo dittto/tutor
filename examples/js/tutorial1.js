@@ -48,7 +48,7 @@ var boxes = {
     },
 
     introBox6: {
-        contentText: 'You can multiple tutorials on a page, but only one can be followed at a given time. You can also pause, reset, and cancel tutorials. Click on the pause button above.<br/><br/>If you\'ve done that already then click Ok.',
+        contentText: 'You can have multiple tutorials on a page, but only one can be followed at a given time. You can also pause, reset, and cancel tutorials. Click on the <b>pause button</b> above and then click on "Welcome tutorial".<br/><br/>If you\'ve done that already then click Ok.',
         isCentral: true,
         needsBg: true
     },
@@ -70,6 +70,45 @@ var boxes = {
         contentText: 'This tutorial has now been cancelled. You can restart this by clicking on "Welcome tutorial" in the right column.',
         isCentral: true,
         needsBg: true
+    },
+
+    advanced1: {
+        content: '#contentPage',
+        isCentral: true,
+        needsBg: true
+    },
+
+    advanced2: {
+        contentText: 'You can also change the text on the default ok button to anything you want.',
+        isCentral: true,
+        needsBg: true,
+        buttonText: 'Awesome'
+    },
+
+    advanced3: {
+        contentText: 'This box will be in the centre of the page for desktop users. Shrink the width of the browser though and refresh, and you\'ll see it attaches itself to the bottom of the page.',
+        isCentral: true,
+        needsBg: true,
+        moveToBottom: true
+    },
+
+    advanced4a: {
+        maxWidth: 500,
+        contentText: 'This is an auto-close box. These will disappear once all other boxes have been closed. These can be attached as normal to a DOM object, can be centered, or can be positioned along the bottom, like this.',
+        autoClose: true,
+        isBottom: true,
+        needsBg: true
+    },
+
+    advanced4b: {
+        contentText: 'You can reuse boxes from other tutorials as well. The box below this is reused from the welcome tutorial.<br/><br/>Click on Ok in this box and the other to close the auto-close box',
+        parentObject: '.yellow-box'
+    },
+
+    advanced5: {
+        contentText: 'Thanks for completing this tutorial!',
+        isCentral: true,
+        needsBg: true
     }
 };
 
@@ -81,6 +120,9 @@ var tutorials = {
     tutorialA: {
         boxes: ['introBox1', 'introBox2', 'introBox3', 'introBox4', ['introBox5a', 'introBox5b'], 'introBox6', 'introBox7']
     },
+    tutorialB: {
+        boxes: ['advanced1', 'advanced2', 'advanced3', ['advanced4a', 'advanced4b', 'introBox5b'], 'advanced5']
+    },
     pause: {
         hideControls: true,
         boxes: ['pause']
@@ -91,15 +133,19 @@ var tutorials = {
     }
 };
 
+
 var tutor = new Tutor(jQuery);
 var promise = tutor.init(boxes, tutorials);
-tutor.tutorial('tutorialA');
+jQuery(document).ready(function() {
+    // list the tutorials that can auto-start
+    tutor.tutorial(['tutorialA', 'tutorialB']);
+});
 
-$('.startTutorialA').click(function() {
+$('body').on('click', '.startTutorialA', function() {
     tutor.tutorial('tutorialA', true);
 });
 
-$('.startTutorialB, #tutor-box-introBox7-button-nextButton').click(function() {
+$('body').on('click', '.startTutorialB', function() {
     tutor.tutorial('tutorialB', true);
 });
 
@@ -107,6 +153,12 @@ $('.image-box').click(function() {
     $('body').trigger('image-box-trigger');
 });
 
-$('body').on('click', '#tutor-box-introBox3-button-alertButton', function() {
+$('body').on({click: function() {
+    tutor.tutorial('tutorialB', true);
+    tutor.completeTutorial('tutorialA');
+}}, 'button#tutor-box-introBox7-button-nextButton');
+
+$('body').on({click: function() {
     alert('Thanks for clicking');
-});
+}}, 'button#tutor-box-introBox3-button-alertButton');
+

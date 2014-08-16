@@ -1,9 +1,11 @@
 /**
+ * Creates the various boxes for Tutor. Contains the logic of where they should
+ * appear
  *
- * @param $
- * @param htmlObj
- * @param configManager
- * @param promiseFactory
+ * @param $ The jQuery object
+ * @param htmlObj The object to create the html for the boxes
+ * @param configManager Manages and merges the various configs
+ * @param promiseFactory A factory for promises, as each box needs it's own
  * @returns {{showBox: (*|Function), closeBox: Function, closeBoxes: Function, getConfig: *}}
  * @constructor
  */
@@ -14,11 +16,21 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
     var obj = {}, defaultConfig;
 
     /**
+     * The default config
+     *  - boxClass: The base class for every box
+     *  - centralClass: The class for centralised boxes
+     *  - bottomClass: The class for boxes that sit along the bottom of the
+     *  window
+     *  - bottomMoveClass: The class for centralised boxes that move to the
+     *  bottom on smaller screens
      *
-     * @type {{boxClass: string}}
+     * @type {{boxClass: string, centralClass: string, bottomClass: string, bottomMoveClass: string}}
      */
     defaultConfig = {
-        boxClass: 'tutor-box'
+        boxClass: 'tutor-box',
+        centralClass: 'tutor-box-central',
+        bottomClass: 'tutor-box-bottom',
+        bottomMoveClass: 'tutor-box-bottom-move'
     };
     configManager.setDefaultConfig(defaultConfig);
 
@@ -28,7 +40,7 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
      * @param config The config for boxes
      * @param boxName The name of the box to create
      * @param box The options for the box
-     * @returns {promiseFactory.init}
+     * @returns {TutorPromise.getPromise}
      */
     obj.showBox = function (config, boxName, box) {
         // init vars
@@ -42,7 +54,7 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
         obj.createBox(config, box, boxName, boxId);
 
         // position the box
-        obj.calcBoxPosition(boxId, box);
+        obj.calcBoxPosition(config, boxId, box);
 
         // add the events
         obj.initButtonEvents(boxName, box.buttonList, !box.autoClose, box.triggerOn);
@@ -54,11 +66,12 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
     };
 
     /**
+     * Creates a box in html and appends it to the body
      *
-     * @param config
-     * @param box
-     * @param boxName
-     * @param boxId
+     * @param config The config from this object
+     * @param box The options fo the box
+     * @param boxName The name of the box to create
+     * @param boxId The id for the box dom object
      */
     obj.createBox = function (config, box, boxName, boxId) {
         $('body').append(htmlObj.box(config, box, boxName, boxId, obj.getButtonId, obj.getOkButtonTrigger));
@@ -143,11 +156,12 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
     /**
      * Calculates the box position
      *
+     * @param config The config for all boxes
      * @param boxId The id of the box to calculate the box for
      * @param boxConfig The config for the box
      * @returns null
      */
-    obj.calcBoxPosition = function (boxId, boxConfig) {
+    obj.calcBoxPosition = function (config, boxId, boxConfig) {
         // init vars
         var offset, $box, $parent, h, w, align;
 
@@ -156,8 +170,8 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
         if (!!boxConfig.maxWidth) {
             $box.css('max-width', boxConfig.maxWidth);
         }
-        if (!!boxConfig.isCentral) {
-            return obj.calcBoxPositionCentral($box, !!boxConfig.moveToBottom);
+        if (!!boxConfig.isCentral || !!boxConfig.isBottom) {
+            return obj.calcBoxPositionCentral(config, $box, !!boxConfig.isBottom, !!boxConfig.moveToBottom);
         }
 
         // otherwise calculate the position based on the parent
@@ -182,16 +196,24 @@ var TutorBox = function ($, htmlObj, configManager, promiseFactory) {
     /**
      * Moves the box into the center of the screen
      *
+     * @param config The config for the boxes
      * @param $box The jQuery object of the box
+     * @param isBottom A flag to always position the box at the bottom
      * @param moveToBottom A flag to move the box to the bottom of the page
      */
-    obj.calcBoxPositionCentral = function ($box, moveToBottom) {
+    obj.calcBoxPositionCentral = function (config, $box, isBottom, moveToBottom) {
         // set to center of window
         $box.css('margin-left', -1 * ($box.width() / 2));
         $box.css('margin-top', -1 * ($box.height() / 2));
 
-        // add the centralised class
-        $box.addClass('tutor-box-central' + (moveToBottom ? ' tutor-box-bottom' : ''));
+        // add the centralised class and move to bottom classes
+        $box.addClass(config.centralClass);
+        if (moveToBottom) {
+            $box.addClass(config.bottomMoveClass);
+        }
+        if (isBottom) {
+            $box.addClass(config.bottomClass);
+        }
     };
 
     /**

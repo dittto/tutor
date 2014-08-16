@@ -15,19 +15,13 @@ An idea to help make web applications easier to learn to use. This will show you
 ## Next steps
 
  - Finish doc blocks
- - JS Lint everything
- - Add Travis CI if possible
+ - markdown docs
 
 ## Future improvements
 
- - Tutorial 2 that shows the catfish and importing data from the page
- - Tutorial 3 that shows how it works with tabs
-
- - Make page scroll to tutorial box if not on display already
+ - Make page scroll to tutorial box if not in display already
  - Add animations object
  - Reposition the boxes on browser resize
  - Stop the boxes overlapping
  - Linked tutorials across pages
  - Easy method to recall current progress and which are complete
- - Allow multiple pause / cancel boxes in the configs so each tutorial can have personalised pause / cancel boxes
- - Force tutorials to cancel from an external trigger

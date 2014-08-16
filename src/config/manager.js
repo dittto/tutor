@@ -1,6 +1,7 @@
 /**
+ * Takes multiple configs and merges them into one coherent one
  *
- * @param userConfig
+ * @param userConfig User-level overrides for the config
  * @returns {{getConfig: *}}
  * @constructor
  */
@@ -15,14 +16,16 @@ var TutorConfigManager = function (userConfig) {
     obj.promise = null;
 
     /**
+     * Stores the user's values, which will override the default values
      *
-     * @param config
+     * @param config The config values
      */
     obj.setUserConfig = function (config) {
         obj.userConfig = config;
     };
 
     /**
+     * Retrieves the user's values
      *
      * @returns {*}
      */
@@ -31,14 +34,16 @@ var TutorConfigManager = function (userConfig) {
     };
 
     /**
+     * Stores the default values. These are the base-level config values
      *
-     * @param config
+     * @param config The config values
      */
     obj.setDefaultConfig = function (config) {
         obj.defaultConfig = config;
     };
 
     /**
+     * Returns the default values
      *
      * @returns {*}
      */
@@ -47,9 +52,13 @@ var TutorConfigManager = function (userConfig) {
     };
 
     /**
+     * Gets the config using the default values, user values, and any
+     * additional passed to this method. These values are cached but can be
+     * recalculated by setting the forceOverride flag to true
      *
-     * @param overrideConfig
-     * @param forceOverride
+     * @param overrideConfig The values to override all others
+     * @param forceOverride Set this to break the cache and recalculate the
+     * config
      * @returns {*}
      */
     obj.getConfig = function (overrideConfig, forceOverride) {
@@ -63,9 +72,10 @@ var TutorConfigManager = function (userConfig) {
     };
 
     /**
+     * Handles the merging of one set of config values into another
      *
-     * @param defaultValues
-     * @param overrideValues
+     * @param defaultValues The values to be overridden
+     * @param overrideValues The values to override with
      * @returns {*}
      */
     obj.merge = function (defaultValues, overrideValues) {

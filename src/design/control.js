@@ -1,9 +1,13 @@
 /**
+ * Creates the controls for the tutorials - the reset, cancel, and pause
+ * options
  *
- * @param $
- * @param htmlObj
- * @param configManager
- * @param promiseFactory
+ * @param $ The jquery object
+ * @param htmlObj The object that creates the html
+ * @param configManager A manager that merges all of the configs into one for
+ * this object
+ * @param promiseFactory Creates promise objects as one is created whenever the
+ * controls are shown
  * @returns {{showControls: (*|Function), hideControls: Function, getConfig: *}}
  * @constructor
  */
@@ -14,6 +18,11 @@ var TutorControl = function ($, htmlObj, configManager, promiseFactory) {
     var obj = {}, defaultConfig;
 
     /**
+     * The default config
+     *  - id: The dom id of the control box
+     *  - pauseId: The dom id of the pause button
+     *  - resetId: The dom id of the reset button
+     *  - cancelId: The dom id of the cancel button
      *
      * @type {{id: string, pauseId: string, resetId: string, cancelId: string}}
      */
@@ -26,9 +35,10 @@ var TutorControl = function ($, htmlObj, configManager, promiseFactory) {
     configManager.setDefaultConfig(defaultConfig);
 
     /**
+     * Shows a single set of the controls by appending it to the body
      *
-     * @param config
-     * @returns {Deferred}
+     * @param config The config for the controls
+     * @returns {$.Deferred}
      */
     obj.showControls = function (config) {
         // try and find the control box
@@ -64,8 +74,9 @@ var TutorControl = function ($, htmlObj, configManager, promiseFactory) {
     };
 
     /**
+     * Hides the controls and removes any associated events
      *
-     * @param config
+     * @param config The config for the controls
      */
     obj.hideControls = function (config) {
         $('#' + config.id).remove();
@@ -73,21 +84,24 @@ var TutorControl = function ($, htmlObj, configManager, promiseFactory) {
     };
 
     /**
-     *
+     * Triggered by an event, this updates the promise to say that pause has
+     * been selected
      */
     obj.handlePause = function () {
         obj.promise.notify('pause', {});
     };
 
     /**
-     *
+     * Triggered by an event, this updates the promise to say that reset has
+     * been selected
      */
     obj.handleReset = function () {
         obj.promise.notify('reset', {});
     };
 
     /**
-     *
+     * Triggered by an event, this updates the promise to say that cancel has
+     * been selected
      */
     obj.handleCancel = function () {
         obj.promise.notify('cancel', {});

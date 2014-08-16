@@ -1,8 +1,9 @@
 /**
+ * A service locator for the design elements of Tutor
  *
- * @param box
- * @param background
- * @param control
+ * @param box The box object
+ * @param background The background object
+ * @param control The control object
  * @returns {{box: Function, background: Function, control: Function}}
  * @constructor
  */
@@ -13,6 +14,7 @@ var TutorDesign = function (box, background, control) {
     var obj = {};
 
     /**
+     * Returns the box object
      *
      * @returns TutorBox
      */
@@ -21,6 +23,7 @@ var TutorDesign = function (box, background, control) {
     };
 
     /**
+     * Returns the background object
      *
      * @returns TutorBackground
      */
@@ -29,6 +32,7 @@ var TutorDesign = function (box, background, control) {
     };
 
     /**
+     * Returns the control object
      *
      * @returns TutorControl
      */
@@ -36,6 +40,9 @@ var TutorDesign = function (box, background, control) {
         return control;
     };
 
+    /**
+     * Public methods
+     */
     return {
         box: obj.getBox,
         background: obj.getBackground,

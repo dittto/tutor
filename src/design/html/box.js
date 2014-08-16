@@ -1,6 +1,7 @@
 /**
+ * Creates the html for a generic box
  *
- * @param $
+ * @param $ The jQuery object
  * @returns {{box: *}}
  * @constructor
  */
@@ -11,13 +12,16 @@ var TutorHtmlBox = function ($) {
     var obj = {};
 
     /**
+     * Creates the box html using the various settings passed from TutorBox()
      *
-     * @param config
-     * @param box
-     * @param boxName
-     * @param boxId
-     * @param getButtonIdFunc
-     * @param getOkButtonTriggerFunc
+     * @param config The config options from TutorBox()
+     * @param box The individual box options - see TutorMain()
+     * @param boxName The name of the box
+     * @param boxId The id value of the box
+     * @param getButtonIdFunc A function that creates button ids. This is a
+     * function in TutorBox()
+     * @param getOkButtonTriggerFunc A function that creates the event name for
+     * the ok button. This is also a function in TutorBox()
      * @returns {string}
      */
     obj.getBox = function (config, box, boxName, boxId, getButtonIdFunc, getOkButtonTriggerFunc) {
@@ -60,7 +64,7 @@ var TutorHtmlBox = function ($) {
         // check the selector
         var content = '';
         if (selector !== '') {
-            content = $(selector).text();
+            content = $(selector).html();
         } else {
             content = text;
         }

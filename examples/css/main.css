@@ -43,8 +43,17 @@
     background: rgba(41, 128, 185, 1.0);
 }
 
+.tutor-box-bottom {
+    bottom: 0;
+    margin-bottom: 0;
+    position: fixed;
+    left: 50%;
+    top: auto;
+    z-index: 400;
+}
+
 @media only screen and (max-width: 992px) {
-    .tutor-box-bottom {
+    .tutor-box-bottom-move {
         bottom: 0;
         margin-bottom: 0;
         position: fixed;

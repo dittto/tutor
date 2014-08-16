@@ -1,13 +1,16 @@
 /*global TutorBox, TutorHtmlBox, TutorConfigManager, TutorPromiseFactory, TutorPromise, TutorBackground, TutorHtmlBackground, TutorControl, TutorHtmlControl, TutorDesign, TutorMain, TutorPage, TutorPromiseStore, TutorStore */
 
 /**
+ * Creates a generic Tutor object. Override or replace this function to use
+ * your own functions for Tutor
  *
- * @param jQuery
- * @returns {*}
+ * @param jQuery The jQuery object
+ * @returns {TutorMain}
  * @constructor
  */
 var Tutor = function (jQuery) {
     "use strict";
+
     // init vars
     var tutorBox, tutorBackground, tutorControl, tutorDesign;
 
